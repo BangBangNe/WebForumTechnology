@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="user_infor.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="infor">
+        <header class="header">
+            <nav class="header_navbar">
+                StackOverflow
+            </nav>
+        </header>
+
+        <div class="container">
+            <div class="container_left">
+                <ul class="left_menu">
+                    <li><ion-icon name="home-outline"></ion-icon> Home</li>
+                    <li><ion-icon name="person-outline"></ion-icon> Trang cá nhân</li>
+                    <li><ion-icon name="pricetags-outline"></ion-icon> Tags</li>
+                    <li><ion-icon name="pencil-outline"></ion-icon> Bàn luận vấn đề</li>
+                    <li><ion-icon name="chatbox-outline"></ion-icon> Chat</li>
+                    <li><ion-icon name="search-circle-outline"></ion-icon> Users</li>
+                </ul>
+            </div>
+            <div class="container_right">
+                <div class="container_avata">
+                    <img src="test.jpg" alt="" class="avata">
+                </div>
+
+                <div class="container_name">
+                    <b>PLong</b>
+                    <p>12/12/2012 Sinh Sống Ở TP.HCM</p>
+                </div>
+                <div class="flower"id="followerCount">111</div>
+                <div class="button" id="followBtn">
+                    FLow me
+                </div>
+                <!-- Chat -->
+                <div class="container_chat">Chat</div>
+                <!-- Khung chat -->
+                 <div class="chat_box">
+                    <!-- Phần đầu -->
+                    <div class="chat_box_header">
+                        <img src="test.jpg" alt="" class="chat_avata">
+                        <div class="chat_infor">
+                            <h3>Nguyen</h3>
+                            <p>2 giờ trước.<i class="fas fa-globe-asia"></i></p>
+                        </div>
+                        <div class="chat_actions">
+                            <button class="chat_mini">-</button>
+                            <button class="chat_close">x</button>
+                        </div>
+                    </div>
+                    <!-- Nội dung chat -->
+                     <div class="chat_content"> <!-- Nội dung nhận được -->
+                        <div class="chat_message received">
+                            <div class="message_text">Xin chào</div>
+                            <!-- <div class="message_time">2 giờ trước</div> -->
+                        </div>
+                        <div class="chat_message sent"> <!-- Nội dung gửi đi -->
+                            <div class="message_text">Chào bạn</div>
+                            <!-- <div class="message_time">1 giờ trước</div> -->
+                        </div>  
+                     </div>
+                    <!-- Phần nhập tin nhắn -->
+                     <form action="" class="chat_input">
+                        <input type="hidden" name="message_id" value="123" id="message_id"> <!-- Input ẩn cho ID tin nhắn -->
+                        <input type="text" class="chat_input_box" placeholder="Nhập tin nhắn..." required>
+                        <button type="submit" class="send_btn"><i class="fas fa-paper-plane"></i></button>
+                     </form>
+                 </div>
+
+                <div class="container_stats">
+                    <p>Thời gian hoạt đông</p>
+                    <p>Level</p>
+                    <p>Rate</p>
+                    <p>Số cmt</p>
+                </div>
+
+                <div class="container_about">
+                    <ul>
+                        <li>Chuyên gia thẩm định phần mêm</li>
+                        <li>Đã từng tham gia gia thực hiện các dự án:</li>
+                        <ul>
+                            <li>GenShi</li>
+                            <li>Honkai Star Right</li>
+                            <li>WuWa</li>
+                        </ul>
+                    </ul>
+                </div>
+
+                <div class="container_stats">
+                    <p>Thời gian hoạt đông</p>
+                    <p>Level</p>
+                    <p>Rate</p>
+                    <p>Số cmt</p>
+                </div>
+
+                <div class="container_post">
+                    <div class="post_header">
+                        <img src="test.jpg" alt="" class="post_avata">
+                        <div class="post_user_infor">
+                            <h3>Plong</h3>
+                            <p>2 giờ trước . <i class="fas fa-globe-asia"></i></p>
+                        </div>
+                    </div>
+
+                    <!-- Nội dung bài viết -->
+                     <div class="post_content">
+                        <p class="post_text">Làm sao để cài visual code vậy ???</p>
+                     </div>
+
+                     <!-- Thống kê -->
+                     <div class="post_stats">
+                        <div class="likes_count"><i class="fas fa-thumbs-up">42</i></div>
+                        <div class="comments_count">5 bình luận</div>
+                     </div>
+
+                     <!-- Các nút hành động  -->
+                    <div class="post_actions">
+                        <div class="action_btn like_btn" onclick="toggleLike(this)">
+                            <i class="far fa-thumbs-up"></i>
+                            <span>Thích</span>
+                        </div>
+                        <div class="action-btn comment-btn" onclick="focusComment()">
+                            <i class="far fa-comment"></i>
+                            <span>Bình luận</span>
+                        </div>
+                        <div class="action_btn share_btn">
+                            <i class="far fa-share-square"></i>
+                            <span>Chia sẻ</span>
+                        </div>
+                    </div>
+                    <!-- Phần bình luận  -->
+                     <div class="comment_section">
+                        <div class="comment_input">
+                            <img src="test.jpg" alt="" class="comment_avata">
+                            <textarea name="" class="comment_input_box" placeholder="Viết bình luận ....." rows="1"></textarea>
+                        </div>
+
+                        <div class="comment_list">
+                            <!-- Bình luận 1 -->
+                            <div class="comment_item">
+                                <img src="test.jpg" alt="" class="comment_avata">
+                                <div class="comment_content">
+                                    <div class="comment_user">Đoàn Công Yeah</div>
+                                    <div class="comment_text">Xin chào</div>
+                                    <div class="comment_actions">
+                                        <span class="comment_action">Thích</span>
+                                        <span class="comment_action">Phản hồi</span>
+                                        <span class="comment_action">1 giờ trước</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Phần bình luận 2 -->
+                            <div class="comment_item">
+                                <img src="test.jpg" alt="" class="comment_avata">
+                                <div class="comment_content">
+                                    <div class="comment_user">Bé thích lập trình</div>
+                                    <div class="comment_text">Bạn lên youtube xem là biết à</div>
+                                    <div class="comment_actions">
+                                        <span class="comment_action">Thích</span>
+                                        <span class="comment_action">Phản hồi</span>
+                                        <span class="comment_action">2 giờ trước</span>
+                                    </div>
+                                 </div>
+                            </div>
+                         </div>
+                     </div>
+                </div>
+            </div>
+        </div>
+        <script src="user_infor.js"></script>
+        <footer class="footer">
+
+        </footer>
+    </div>
+    <script  type = "module"  src = "https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js" > </script> 
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>
