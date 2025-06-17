@@ -1,0 +1,30 @@
+.sidebar {
+    height: 100%;
+    width: 200px;
+    top: 0;
+    left: 0;
+    background-color: white;
+    border-right: 1px solid #ccc;
+    margin: 5% 0 0 10%;
+    padding: 20px;
+    position: absolute;
+}
+
+.sidebar a {
+    display: block;
+    color: black;
+    padding: 12px;
+    text-decoration: none;
+}
+
+.sidebar a:hover {
+    background-color: #575757;
+    color: aliceblue;
+}
+.sb1, .sb2 {
+    padding-top: 10%;
+    padding-bottom: 10%;
+}
+.sidebar a i {
+    margin-right: 8px;
+}
