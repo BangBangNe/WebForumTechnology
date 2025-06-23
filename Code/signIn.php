@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['User_ID'] = $user['User_ID'];
         $_SESSION['User_name'] = $user['User_name'];
         echo "Đăng nhập thành công!";
-        header("Location: index.php");
+        header("Location: main.php");
     } else {
         echo "Email hoặc mật khẩu không chính xác. Vui lòng thử lại.";
     }

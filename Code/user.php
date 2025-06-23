@@ -5,112 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <!-- <link rel="stylesheet" href="style/user.css"> -->
-    <style>
-        body{
-            margin: 10%;
-        }
-        .main{
-            display: flex;
-            justify-content: center;
-            padding: 0 20px 20px 20px;
-        }
-        .users{
-            width: 100%;
-            height: 100%;
-            max-width: 960px;
+    <link rel="stylesheet" href="../Style/user.css">
 
-        }
-        .tim-xep{
-            display: flex;
-            justify-content: space-between;
-        }
-        .tim-xep input{
-            width: 100%;
-            padding: 12px 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .sap-xep{
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            padding: 10px;
-        }
-        .sap-xep a{
-            text-decoration: none;
-        }
-        .sap-xep span{
-            padding: 10px;
-            border-radius: 6px;
-        }
-        .sap-xep span:hover{
-            background-color: #ccc;
-            padding: 10px;
-            border-radius: 6px;
-        }
-        .time{
-            display: flex;
-            justify-content: end;
-            padding: 5px;
-        }
-        .time .sub-time{
-            display: flex;
-            gap: 20px;
-            height: 25px; /* hàng dễ vỡ, đừng đụng vào height này */
-        }
-        .sub-time a{
-            padding: 5px;
-            text-decoration: none;
-        }
-        .sub-time a:hover{
-            border-bottom: 1px solid rgb(216, 79, 79) ;
-        }
-        .trang-user{
-            width: 100%;
-            height: 100%;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px; 
-        }
-        .user {
-            display: flex;
-            align-items: center;
-            border: 1px solid #ccc;
-            padding: 10px;
-            gap: 10px;
-            border-radius: 8px;
-            background-color: #f9f9f9;
-        }
-
-        .anh {
-            width: 80px;
-            height: 80px;
-            flex-shrink: 0;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 1px solid #ccc;
-        }
-
-        .anh img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; 
-        }
-        .thongtin h4{
-            margin-top: 0;
-            margin-bottom: 0;
-        }
-        .sidebar{
-            padding: 20px;
-        }
-    </style>
 </head>
-<?php include 'header.php'?>
 <body>
-    <?php include 'nav.php'?>
     <div class="main">
         <div class="users">
             <h2>Users</h2>
@@ -423,5 +321,4 @@
     </div>    
     
 </body>
-<?php include 'footer.php';?>
 </html>

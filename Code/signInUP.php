@@ -3,7 +3,7 @@
 <html>
 <head>
     <title>Sign In/Up Form</title>
-    <link rel="stylesheet" type="text/css" href="css/StyleSignInUp.css">
+    <link rel="stylesheet" type="text/css" href="../Style/StyleSignInUp.css">
 </head>
 <body>
     <div class="container" id="container">
@@ -12,7 +12,7 @@
                 <h1>Đăng Nhập</h1>
                 <input type="email" name="email" placeholder="Email" required />
                 <input type="password" name="password" placeholder="Mật khẩu" required />
-                <button type="submit" class="signup-btn">Đăng Nhập</button>
+                <button type="submit" class="signup-btn">Đăng Nhập</button><br>
                 <span>Chưa có tài khoản? <a href="#" id="signUp">Đăng ký</a></span>
             </form>
         </div>
@@ -22,7 +22,7 @@
                 <input type="text" name="name" placeholder="Name" required />
                 <input type="email" name="email" placeholder="Email" required />
                 <input type="password" name="password" placeholder="Mật khẩu" required />
-                <button type="submit" class="signup-btn">Đăng Ký</button>
+                <button type="submit" class="signup-btn">Đăng Ký</button><br>
                 <span>Đã có tài khoản? <a href="#" id="signIn">Đăng nhập</a></span>
             </form>
              </div>

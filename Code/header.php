@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Header</title>
-  <link rel="stylesheet" href="../style/header.css">
+  <link rel="stylesheet" href="../Style/header.css">
 </head>
 <body>
     <header>
@@ -23,8 +23,8 @@
           </div>
       
             <div class="phai">
-                <button class="login-btn" onclick="window.location.href='index.php?action=logout';">Đăng Nhập</button>
-                <button class="login-btn" onclick="window.location.href='signinUp.php';">Đăng Ký</button>   
+                <button class="login-btn" onclick="window.location.href='index.php?action=logout';">Đăng Xuất</button>
+                <button class="login-btn" onclick="window.location.href='Code/signinUP.php';">Đăng Nhập</button>   
                 <button class="chuong-thong-bao"><img src="icon/bell.png" alt=""></button>
             </div>
         </div>
