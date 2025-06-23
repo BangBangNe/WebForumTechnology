@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (mysqli_num_rows($result) > 0) {
         echo "Đăng nhập thành công!";
         // Chuyển hướng đến trang khác 
-         header("Location: admin_dashboard.php");
+         header("Location: admin.php");
     } else {
         echo "Thông tin đăng nhập không chính xác. Vui lòng thử lại.";
     }

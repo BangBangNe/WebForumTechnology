@@ -7,7 +7,7 @@ $loginError = isset($_GET['error']) ? $_GET['error'] : '';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="css/StyleAdmin.css">
+    <link rel="stylesheet" type="text/css" href="../Style/StyleAdmin.css">
 </head>
 <body>
     <div class="container">
