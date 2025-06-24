@@ -11,22 +11,25 @@
 <body>
     <div class="main">
         <div class="users">
-            <h2>Users</h2>
+            <h1>Người dùng</h1>
                 <div class="tim-xep">
-                    <form><input type="text" placeholder="Tìm kiếm..." /></form>
-                    <div class="sap-xep">
-                        <a href=""><span>người dùng mới</span></a>
-                        <a href=""><span>độ uy tín</span></a>
-                        <a href=""><span>votes</span></a>
+                    <div class="fas fa-search">
+                        <form><input type="text" placeholder="Tìm kiếm..." /></form>
                     </div>
-                    
+                    <div class="sap-xep">
+                        <a href=""><span>Tìm kiếm theo TOP |</span></a>
+                        <a href=""><span>Kinh Nghiệm</span></a>
+                        <a href=""><span>Rate</span></a>
+                        <a href=""><span>Theo dõi</span></a>
+                    </div>
                 </div>
             <div class="time">
                 <div class="sub-time">
-                    <a href=""><span>tuần</span></a>
-                    <a href=""><span>tháng</span></a>
+                    <a href=""><span>Người đang theo dõi</span></a>
+                    <a href=""><span>A-Z</span></a>
                 </div>
             </div>
+            <br>
             <div class="trang-user">
                 <div class="user">
                     <div class="anh"><img src="Anh/Hina_(Dress).png" alt=""></div>

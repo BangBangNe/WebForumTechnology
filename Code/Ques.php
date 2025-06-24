@@ -1,5 +1,6 @@
 <?php include 'connect.php';
-
+    
+// Lấy câu hỏi
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     echo "<h2>Không tìm thấy bài viết.</h2>";
     exit;
@@ -14,7 +15,25 @@ $sql = "SELECT q.Mo_ta, q.Hinh_anh, t.Name AS tag_name, u.User_name
         WHERE q.ID_Ques = $id";
 
 $result = $conn->query($sql);
+
+// Lấy bình luận của câu hỏi
+$comments = [];
+if ($question) {
+    $ques_id = $question['ID_Ques'];
+    $cmt_result = mysqli_query($link, "
+        SELECT c.Comment, u.User_name, u.avatar
+        FROM comments c
+        JOIN users u ON c.ID_User = u.User_ID
+        WHERE c.ID_Ques = $ques_id
+    ");
+    while ($row = mysqli_fetch_assoc($cmt_result)) {
+        $comments[] = $row;
+    }
+}
+
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="vi">

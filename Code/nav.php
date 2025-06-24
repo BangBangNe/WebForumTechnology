@@ -11,15 +11,13 @@
     <div class="sidebar">
         <div class="sb1">
             <a href="index.php?page=main"><i class="fas fa-home"></i>Trang chủ</a> <br>
-            <a href=""><i class="fas fa-question-circle"></i>Câu hỏi</a><br>
-            <a href="index.php?page=tag"><i class="fas fa-tags"></i>Tags</a><br>
             <a href="index.php?page=user_infor"><i class="fas fa-user"></i>Tài khoản</a><br>
+            <a href=""><i class="fas fa-flask"></i>Thảo Luận</a><br>
         </div>
         <div class="sb2">
-            <a href=""><i class="fas fa-flask"></i>Labs</a><br>
-            <a href=""><i class="fas fa-comment-dots"></i>Chat</a><br>
-            <a href=""><i class="fas fa-file-alt"></i>Articles</a><br>
-            <a href="index.php?page=user"><i class="fas fa-users"></i>Users</a><br>
+            <a href=""><i class="fas fa-comment-dots"></i>Trò chuyện</a><br>
+            <a href="index.php?page=tag"><i class="fas fa-tags"></i>Tags</a><br>
+            <a href="index.php?page=user"><i class="fas fa-users"></i>Người dùng</a><br>
         </div>
     </div>
 </body>
