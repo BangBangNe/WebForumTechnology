@@ -19,7 +19,7 @@
     <div id="main-content" class="container" style="width:70%;">
       <?php
       $page = isset($_GET['page']) ? $_GET['page'] : 'main';
-      $allowed_pages = ['main', 'user', 'user_infor', 'tag']; // an toàn tránh include linh tinh
+      $allowed_pages = ['main', 'user', 'user_infor', 'tag','mainPost']; // an toàn tránh include linh tinh
       if (in_array($page, $allowed_pages)) {
         include "Code/{$page}.php";
       } else {

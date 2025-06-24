@@ -1,21 +1,40 @@
-function toggleLike(btn){
-    btn.classList.toggle('active');
-    const icon =btn.querySelector('i');
-    const text=btn.querySelector('span');
+function toggleLike(btn, questionId) {
+    fetch('Code/xuly_like.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'question_id=' + encodeURIComponent(questionId)
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            const icon = btn.querySelector('i');
+            const text = btn.querySelector('span');
+            const likeCountDiv = btn.closest('.container_post').querySelector('.likes_count');
 
-    if(btn.classList.contains('active')){
-        icon.classList.replace('far','fas');
-        text.textContent="Đã thích";
-    }else{
-        icon.classList.replace('fas', 'far');
-        text.textContent = 'Thích';
-    }
+            if (data.status === 'liked') {
+                btn.classList.add('active');
+                icon.classList.replace('far', 'fas');
+                text.textContent = 'Đã thích';
+            } else {
+                btn.classList.remove('active');
+                icon.classList.replace('fas', 'far');
+                text.textContent = 'Thích';
+            }
 
-    //Cập nhập số lượng like
-    const likesCount=document.querySelector('.likes_count');
-    const currentLikes=parseInt(likesCount.textContent);
-    likesCount.textContent=btn.classList.contains('active')? currentLikes+1:currentLikes-1;
+            likeCountDiv.innerHTML = `<i class="fas fa-thumbs-up"></i> ${data.totalLikes}`;
+        } else {
+            alert('Lỗi: ' + data.message);
+        }
+    })
+    .catch(err => {
+        console.error('Lỗi khi like:', err);
+    });
 }
+
+
+
 
 //Ô comment khi click nút bình luận
 function focusComment(){
@@ -37,11 +56,9 @@ document.addEventListener('DOMContentLoaded', function () {
             const commentText = this.value.trim();
             console.log('Đã gửi comment:', commentText);
             if (commentText) {
-                addNewComment(commentText);
+                sendCommentToServer(commentText);
                 this.value = '';
                 this.style.height = '30%';
-                sendCommentToServer(commentText);
-                console.log('Đã gửi comment:', commentText);
             }
         }
     });
@@ -51,44 +68,58 @@ document.addEventListener('DOMContentLoaded', function () {
 function sendCommentToServer(text) {
     const id_ques = document.querySelector('.comment_input_box').dataset.quesId;
 
-    fetch('xuly_binhluan.php', {
+    fetch('Code/xuly_binhluan.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: `comment=${encodeURIComponent(text)}&id_ques=${encodeURIComponent(id_ques)}`
     })
-    .then(res => res.text())
+    .then(res => res.json())
     .then(data => {
-        console.log('Server phản hồi:', data);
+        if (data.error) {
+            console.error('Lỗi:', data.error);
+        } else {
+            addNewComment(data); // Truyền object đúng dạng
+        }
     })
     .catch(err => console.error('Lỗi gửi comment:', err));
 }
 
+
+
+
 // Thêm comment mới
- function addNewComment(text){ 
-    const commentList=document.querySelector('.comment_list');
+function addNewComment(data) {
+    console.log('Dữ liệu truyền vào addNewComment:', data);
+
+    if (!data || typeof data !== 'object') {
+        console.error('❌ addNewComment gọi sai định dạng', data);
+        return;
+    }
+
+    const commentList = document.querySelector('.comment_list');
     const newComment = document.createElement('div');
     newComment.innerHTML = `
         <div class="comment_item">
-            <img src="test.jpg" alt="" class="comment_avata">
+            <img src="uploads/${data.avatar}" alt="Avatar" class="comment_avata">
             <div class="comment_content">
-                <div class="comment_user">Bạn</div>
-                <div class="comment_text">${text}</div>
+                <div class="comment_user">${data.user_name}</div>
+                <div class="comment_text">${data.text}</div>
                 <div class="comment_actions">
                     <span class="comment_action">Thích</span>
                     <span class="comment_action">Phản hồi</span>
-                    <span class="comment_action">2 giờ trước</span>
+                    <span class="comment_action">${data.time}</span>
                 </div>
             </div>
         </div>`;
     commentList.prepend(newComment);
 
-    //Cập nhật số comment
-    const commentCount=document.querySelector('.comments_count');
-    const currentComments=parseInt(commentCount.textContent);
-    commentCount.textContent=`${currentComments+1} bình luận`;
- }
+    const commentCount = document.querySelector('.comments_count');
+    const current = parseInt(commentCount.textContent) || 0;
+    commentCount.textContent = `${current + 1} bình luận`;
+}
+
 
 // Thu gon và đóng chat
 document.addEventListener('DOMContentLoaded', function() {
@@ -156,7 +187,7 @@ function loadMessages() {
     const isAtBottom = Math.abs(content.scrollTop + content.clientHeight - content.scrollHeight) < 10;
     const previousScrollTop = content.scrollTop;
 
-    fetch(`get_messages.php?sender_id=${sender_id}&receiver_id=${receiver_id}`)
+    fetch(`Code/get_messages.php?sender_id=${sender_id}&receiver_id=${receiver_id}`)
         .then(res => res.text())
         .then(html => {
             // Nếu giống nhau thì không làm gì để tránh nháy
@@ -196,7 +227,7 @@ document.querySelector(".chat_input").addEventListener("submit", async (e) => {
     formData.append("message", message);
 
     try {
-        const response = await fetch("send_message.php", {
+        const response = await fetch("Code/send_message.php", {
             method: "POST",
             body: formData
         });

@@ -12,7 +12,7 @@
         <div class="sb1">
             <a href="index.php?page=main"><i class="fas fa-home"></i>Trang chủ</a> <br>
             <a href="index.php?page=user_infor"><i class="fas fa-user"></i>Tài khoản</a><br>
-            <a href=""><i class="fas fa-flask"></i>Thảo Luận</a><br>
+            <a href="index.php?page=mainPost"><i class="fas fa-flask"></i>Thảo Luận</a><br>
         </div>
         <div class="sb2">
             <a href=""><i class="fas fa-comment-dots"></i>Trò chuyện</a><br>

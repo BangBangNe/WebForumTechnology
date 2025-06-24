@@ -97,6 +97,8 @@
           echo '<div class="meta">0 votes | 0 answers | 2 views</div>';
           echo '<div class="tags">';
           echo '<span class="tag">' . htmlspecialchars($row['tag_name']) . '</span>';
+          echo '<br>';
+          echo '<br>';
           echo '</div>';
           echo '</div>';
         }

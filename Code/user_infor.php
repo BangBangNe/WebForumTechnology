@@ -1,10 +1,12 @@
 <?php
 include 'db_connect.php';
+session_start();
 
 // Lấy user có ID = 6
 // Lấy user có ID = 6
 $you_id = 5; // ID người bạn đang muốn nhắn tin với
 $user_id = 6; // Người đang đăng nhập
+$_SESSION['User_ID'] = $user_id; 
 
 $user_result = mysqli_query($link, "SELECT * FROM users WHERE User_ID = $user_id");
 $user = mysqli_fetch_assoc($user_result);
@@ -34,22 +36,10 @@ if ($conversation) {
 
 
 // Lấy câu hỏi mới nhất của user
-$question_result = mysqli_query($link, "SELECT * FROM questions WHERE ID_user = $you_id ORDER BY Date_tao DESC LIMIT 1");
-$question = mysqli_fetch_assoc($question_result);
-
-// Lấy bình luận của câu hỏi
-$comments = [];
-if ($question) {
-    $ques_id = $question['ID_Ques'];
-    $cmt_result = mysqli_query($link, "
-        SELECT c.Comment, u.User_name, u.avatar
-        FROM comments c
-        JOIN users u ON c.ID_User = u.User_ID
-        WHERE c.ID_Ques = $ques_id
-    ");
-    while ($row = mysqli_fetch_assoc($cmt_result)) {
-        $comments[] = $row;
-    }
+$question_result = mysqli_query($link, "SELECT * FROM questions WHERE ID_user = $you_id ORDER BY Date_tao DESC");
+$questions = [];
+while ($row = mysqli_fetch_assoc($question_result)) {
+    $questions[] = $row;
 }
 // Lấy level của user
 $level_result = mysqli_query($link, "SELECT level FROM users WHERE User_ID = $user_id");
@@ -125,88 +115,131 @@ $is_following = mysqli_num_rows($is_following) > 0;
                     <button type="submit" class="send_btn" id="sendBtn"><i class="fas fa-paper-plane"></i></button>
                 </form>
             </div>
-
-            <div class="container_stats">
-                <p>Thời gian hoạt động</p>
-                <p>Level: <?= $user['level'] ?? 'Chưa xác định' ?></p>
-                <p>Rate</p>
-                <p>Số cmt</p>
-            </div>
-
-            <div class="container_about">
-                <ul>
-                    <?= $user['About'] ?? 'Chưa xác định' ?>
-                </ul>
-            </div>
-
-            <!-- Bài viết -->
-            <?php if ($question): ?>
-                <div class="container_post">
-                    <div class="post_header">
-                        <img src="<?= $user['avatar'] ?? 'test.jpg' ?>" alt="" class="post_avata">
-                        <div class="post_user_infor">
-                            <h3><?= $user['User_name'] ?></h3>
-                            <p><?= $question['Date_tao'] ?? 'Không rõ ngày' ?> . <i class="fas fa-globe-asia"></i></p>
-                        </div>
-                    </div>
-
-                    <div class="post_content">
-                        <p class="post_text"><?= $question['Mo_ta'] ?? 'Không có nội dung câu hỏi' ?></p>
-                    </div>
-
-                    <div class="post_stats">
-                        <div class="likes_count"><i class="fas fa-thumbs-up"></i> 42</div>
-                        <div class="comments_count"><?= count($comments) ?> bình luận</div>
-                    </div>
-
-                    <div class="post_actions">
-                        <div class="action_btn like_btn" onclick="toggleLike(this)">
-                            <i class="far fa-thumbs-up"></i>
-                            <span>Thích</span>
-                        </div>
-                        <div class="action-btn comment-btn" onclick="focusComment()">
-                            <i class="far fa-comment"></i>
-                            <span>Bình luận</span>
-                        </div>
-                        <div class="action_btn share_btn">
-                            <i class="far fa-share-square"></i>
-                            <span>Chia sẻ</span>
-                        </div>
-                    </div>
-
-                    <div class="comment_section">
-                        <div class="comment_input">
-                            <img src="<?= $user['avatar'] ?? 'test.jpg' ?>" alt="" class="comment_avata">
-                            <textarea name="comment" class="comment_input_box" data-ques-id="<?= $question['ID_Ques'] ?>" placeholder="Viết bình luận ....."></textarea>
-                        </div>
-
-                        <div class="comment_list">
-                            <?php if (empty($comments)): ?>
-                                <p>Chưa có bình luận nào.</p>
-                            <?php else: ?>
-                                <?php foreach ($comments as $c): ?>
-                                    <div class="comment_item">
-                                        <img src="<?= $c['avatar'] ?? 'test.jpg' ?>" alt="" class="comment_avata">
-                                        <div class="comment_content">
-                                            <div class="comment_user"><?= htmlspecialchars($c['User_name']) ?></div>
-                                            <div class="comment_text"><?= htmlspecialchars($c['Comment']) ?></div>
-                                            <div class="comment_actions">
-                                                <span class="comment_action">Thích</span>
-                                                <span class="comment_action">Phản hồi</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </div>
+            <div class="layout">  
+                <div class="left">         
+                    <div class="container_stats">
+                        <p>Thời gian hoạt động</p>
+                        <p>Level: <?= $user['level'] ?? 'Chưa xác định' ?></p>
+                        <p>Rate</p>
+                        <p>Số cmt</p>
                     </div>
                 </div>
-            <?php endif; ?>
+                
+                <div class="right">
+                    <div class="container_about">
+                        <ul>
+                            <?= $user['About'] ?? 'Chưa xác định' ?>
+                        </ul>
+                    </div>
+                    <!-- Bài viết -->
+                    <?php if (!empty($questions)): ?>
+                        <?php foreach ($questions as $question): ?>
+                            <?php
+                            // Lấy comment riêng cho mỗi bài
+                            $q_id = $question['ID_Ques'];
+                            $cmt_result = mysqli_query($link, "
+                                SELECT c.Comment, u.User_name, u.avatar
+                                FROM comments c
+                                JOIN users u ON c.ID_User = u.User_ID
+                                WHERE c.ID_Ques = $q_id
+                            ");
+                            //Lấy số lượng like
+                            $like_result = mysqli_query($link, "SELECT like_count FROM questions WHERE ID_Ques = $q_id");
+                            $like_data = mysqli_fetch_assoc($like_result);
+                            $like_count = $like_data['like_count'] ?? 0;
+                            // Kiểm tra người dùng đã like bài viết chưa
+                            $hasLiked = false;
+                            if (isset($user['User_ID'])) {
+                                $userId = $user['User_ID'];
+                                $likeCheckQuery = mysqli_query($link, "
+                                    SELECT 1 FROM question_likes 
+                                    WHERE user_id = $userId AND question_id = $q_id
+                                    LIMIT 1
+                                ");
+
+                                if (!$likeCheckQuery) {
+                                    // Ghi log lỗi hoặc hiển thị ra để debug
+                                    echo "<p style='color:red;'>Lỗi truy vấn LIKE: " . mysqli_error($link) . "</p>";
+                                } else {
+                                    $hasLiked = mysqli_num_rows($likeCheckQuery) > 0;
+                                }
+                            }
+                            $comments = [];
+                            while ($row = mysqli_fetch_assoc($cmt_result)) {
+                                $comments[] = $row;
+                            }
+                            ?>
+                            <div class="container_post">
+                                <div class="post_header">
+                                    <img src="<?= $user['avatar'] ?? 'test.jpg' ?>" alt="" class="post_avata">
+                                    <div class="post_user_infor">
+                                        <h3><?= $user['User_name'] ?></h3>
+                                        <p><?= $question['Date_tao'] ?? 'Không rõ ngày' ?> . <i class="fas fa-globe-asia"></i></p>
+                                    </div>
+                                </div>
+
+                                <div class="post_content">
+                                    <p class="post_text"><?= $question['Mo_ta'] ?? 'Không có nội dung câu hỏi' ?></p>
+                                </div>
+
+                                <div class="post_stats">
+                                    <div class="likes_count"><i class="fas fa-thumbs-up"></i> <?= $like_count ?>  </div>
+                                    <div class="comments_count"><?= isset($comments) ? count($comments) : 0 ?> </div>
+                                </div>
+
+                                <div class="post_actions">
+                                    <div 
+                                    class="action_btn like_btn <?= $hasLiked ? 'active' : '' ?>" 
+                                    onclick="toggleLike(this, <?= $question['ID_Ques'] ?>)">
+                                        <i class="<?= $hasLiked ? 'fas' : 'far' ?> fa-thumbs-up"></i>
+                                        <span><?= $hasLiked ? 'Đã thích' : 'Thích' ?></span>
+                                    </div>
+                                    <div class="action-btn comment-btn" onclick="focusComment()">
+                                        <i class="far fa-comment"></i>
+                                        <span>Bình luận</span>
+                                    </div>
+                                    <div class="action_btn share_btn">
+                                        <i class="far fa-share-square"></i>
+                                        <span>Chia sẻ</span>
+                                    </div>
+                                </div>
+
+                                <div class="comment_section">
+                                    <div class="comment_input">
+                                        <img src="<?= $user['avatar'] ?? 'test.jpg' ?>" alt="" class="comment_avata">
+                                        <textarea name="comment" class="comment_input_box" data-ques-id="<?= $question['ID_Ques'] ?>" placeholder="Viết bình luận ....."></textarea>
+                                    </div>
+
+                                    <div class="comment_list">
+                                        <?php if (empty($comments)): ?>
+                                            <p>Chưa có bình luận nào.</p>
+                                        <?php else: ?>
+                                            <?php foreach ($comments as $c): ?>
+                                                <div class="comment_item">
+                                                    <img src="<?= $c['avatar'] ?? 'test.jpg' ?>" alt="" class="comment_avata">
+                                                    <div class="comment_content">
+                                                        <div class="comment_user"><?= htmlspecialchars($c['User_name']) ?></div>
+                                                        <div class="comment_text"><?= htmlspecialchars($c['Comment']) ?></div>
+                                                        <div class="comment_actions">
+                                                            <span class="comment_action">Thích</span>
+                                                            <span class="comment_action">Phản hồi</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
+            </div>
 
             <div class="end"><br></div>
         </div>
 
-        <script src="../Javascript/user_infor.js"></script>
+        <script src="Javascript/user_infor.js"></script>
     </div>
 
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
@@ -230,7 +263,7 @@ $is_following = mysqli_num_rows($is_following) > 0;
                 followBtn.textContent = '...';
 
                 // Gửi request đến server
-                fetch('follow_action.php', {
+                fetch('Code/follow_action.php', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',

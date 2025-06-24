@@ -262,29 +262,35 @@
 }
 
 /*  */
+.layout {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    align-items: flex-start;
+}
+
+.left{
+    width: 30%;
+}
+
 .container_stats {
-  width: 27%;
-  clear: both;
-  float: left;
   border-radius: 8px;
   padding: 10px;
   margin-top: 15px;
   margin-left: 2%;
-  /* background-color: #f9f9f9; */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.right{
+  margin-right: 1%;
+  width: 70%;
+}
+
 .container_about {
-  float: left;
-  margin-left: 2%;
-  width: 66%;
   margin-top: 15px;
 }
 
 .container_post {
-  float: left;
-  margin-left: 2%;
-  width: 66%;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -441,3 +447,5 @@
 .comment_action:hover {
   text-decoration: underline;
 }
+
+
