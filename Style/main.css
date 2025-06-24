@@ -4,13 +4,6 @@ body {
   margin: 0;
 }
 
-header {
-  background-color: white;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid #ccc;
-}
-
 .questions-header {
   display: flex;
   align-items: center;

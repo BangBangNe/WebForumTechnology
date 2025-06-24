@@ -7,8 +7,6 @@
   <link rel="stylesheet" href="style/style.css">
 </head>
 <body>
-<?php include 'header.php'; ?>
-<?php include 'nav.php'; ?>
 <h5>Danh sách Tags</h5>
 
 <div class="tag-container">
@@ -34,7 +32,5 @@ if ($result->num_rows > 0) {
 $conn->close();
 ?>
 </div>
-
-<?php include 'footer.php'; ?>
 </body>
 </html>

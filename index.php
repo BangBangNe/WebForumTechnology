@@ -16,19 +16,29 @@
   <header> <?php include 'Code/header.php'; ?> </header>
   <div class="container-wrapper">
     <nav class="navigate" style="width:20%;"> <?php include 'Code/nav.php'; ?> </nav>
-    <div class="container" style="width:70%;">    
-    <?php
-    $page = isset($_GET['page']) ? $_GET['page'] : 'main';
-    $allowed_pages = ['main', 'user', 'user_infor', 'tag']; // an toàn tránh include linh tinh
-    if (in_array($page, $allowed_pages)) {
-      include "Code/{$page}.php";
-    } else {
-      echo "<p>Không tìm thấy nội dung.</p>";
-    }
-    ?></div>
+    <div id="main-content" class="container" style="width:70%;">
+      <?php
+      $page = isset($_GET['page']) ? $_GET['page'] : 'main';
+      $allowed_pages = ['main', 'user', 'user_infor', 'tag']; // an toàn tránh include linh tinh
+      if (in_array($page, $allowed_pages)) {
+        include "Code/{$page}.php";
+      } else {
+        echo "<p>Không tìm thấy nội dung.</p>";
+      }
+      ?></div>
   </div>
 
-
+  <!-- Thêm script để xử lý click -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $(document).on('click', '.question-title', function(e) {
+        e.preventDefault();
+        let url = $(this).attr('href');
+        $('#main-content').load(url);
+      });
+    });
+  </script>
 
 
   <footer><?php include 'Code/footer.php'; ?></footer>

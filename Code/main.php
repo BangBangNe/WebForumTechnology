@@ -93,7 +93,7 @@
         while ($row = $result->fetch_assoc()) {
           echo '<div class="question-item">';
 
-          echo '<a class="question-title" href="#">' . htmlspecialchars($row['Mo_ta']) . '</a>';
+          echo '<a class="question-title" href="Code/Ques.php?id=' . htmlspecialchars($row['ID_Ques']) . '">' . htmlspecialchars($row['Mo_ta']) . '</a>';
           echo '<div class="meta">0 votes | 0 answers | 2 views</div>';
           echo '<div class="tags">';
           echo '<span class="tag">' . htmlspecialchars($row['tag_name']) . '</span>';
