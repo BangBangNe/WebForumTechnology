@@ -6,7 +6,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="../Style/Post.css">
+  <link rel="stylesheet" href="../Style/mainPost.css">
   <title>Stack Overflow - Thảo luận</title>
 </head>
 
@@ -16,14 +16,24 @@
 
       <!-- Nội dung chính -->
       <div class="posts-header">
-        <h2>Thảo luận khoa học</h2>
+        <h2>Diễn đàn thảo luận.</h2>
         <div class="user-actions">
           <button class="ask-btn">Tạo bài viết</button>
-          <button id="toggleFilterBtn" class="filter-toggle-btn">lọc</button>
+          <button id="toggleFilterBtn" class="filter-toggle-btn">Lọc</button>
           <div class="user-avatar" title="User profile"></div>
         </div>
       </div>
-      <p>24,234,007 bài viết </p>
+      <div style="color: gray; text-align:justify;">
+        <i>Nơi người dùng cùng thảo luận về các vấn đề liên quan đến công nghệ.</i>
+        <!-- Đếm số lượng bài viết -->
+        <?php
+        $count = "SELECT p.post_id
+                  FROM posts p";
+        $count_ques = $conn->query($count);
+        echo '<p>Hiện tại đang có ' . $count_ques->num_rows . ' câu hỏi.</p>';
+        ?>
+      </div>
+      <br>
 
       <!-- Bộ lọc -->
       <form method="GET">
@@ -113,6 +123,16 @@
 
   </div>
 
+  <script>
+    document.getElementById("toggleFilterBtn").addEventListener("click", function() {
+      var filterBox = document.getElementById("filterBox");
+      if (filterBox.style.display === "none") {
+        filterBox.style.display = "flex";
+      } else {
+        filterBox.style.display = "none";
+      }
+    });
+  </script>
 
 </body>
 

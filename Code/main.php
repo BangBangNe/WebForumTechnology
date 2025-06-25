@@ -1,4 +1,6 @@
-<?php include 'connect.php'; ?>
+<?php include 'connect.php';?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -16,14 +18,24 @@
 
       <!-- Nội dung chính -->
       <div class="questions-header">
-        <h2>Câu hỏi mới nhất</h2>
+        <h2>Diễn đàn câu hỏi</h2>
         <div class="user-actions">
-          <button class="ask-btn">Ask Question</button>
-          <button id="toggleFilterBtn" class="filter-toggle-btn">lọc</button>
+          <button class="ask-btn">Đặt câu hỏi</button>
+          <button id="toggleFilterBtn" class="filter-toggle-btn">Lọc</button>
           <div class="user-avatar" title="User profile"></div>
         </div>
       </div>
-      <p>24,234,007 câu hỏi </p>
+      <div style="color: gray; text-align:justify;">
+        <i>Nơi người dùng có thể đăng các câu hỏi để được giải đáp các thắc mắc về chủ đề liên quan đến công nghệ.</i>
+        <!-- Đếm số lượng bài viết -->
+        <?php
+        $count = "SELECT q.ID_Ques
+        FROM questions q";
+        $count_ques = $conn->query($count);
+        echo '<p>Hiện tại đang có ' . $count_ques->num_rows . ' câu hỏi.</p>';
+        ?>
+      </div>
+      <br>
 
       <!-- Bộ lọc -->
       <form method="GET">

@@ -23,7 +23,7 @@ function toggleLike(btn, questionId) {
                 text.textContent = 'Thích';
             }
 
-            likeCountDiv.innerHTML = `<i class="fas fa-thumbs-up"></i> ${data.totalLikes}`;
+            likeCountDiv.innerHTML = `${data.totalLikes}`;
         } else {
             alert('Lỗi: ' + data.message);
         }

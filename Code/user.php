@@ -59,7 +59,7 @@ $result = $conn->query($sql);
                 </div>
             <div class="time">
                 <div class="sub-time">
-                    <a href="index.php?page=user&followed_by=5"><span>Người đang theo dõi</span></a>
+                    <a href="index.php?page=user&followed_by=<?php echo $_SESSION['User_ID']; ?>"><span>Người đang theo dõi</span></a>
                     <a href="index.php?page=user&sort=az"><span>A-Z</span></a>
                     <a href="index.php?page=user&sort=za"><span>Z-A</span></a>
                 </div>
