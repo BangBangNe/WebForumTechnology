@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = mysqli_real_escape_string($link, $_POST['email']);
     $password = $_POST['password'];
 
-    $stmt = mysqli_prepare($link, "SELECT User_ID, User_Name FROM users WHERE email = ? AND password = ?");
+    $stmt = mysqli_prepare($link, "SELECT User_ID, User_name FROM users WHERE email = ? AND password = ?");
     mysqli_stmt_bind_param($stmt, "ss", $email, $password);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
@@ -22,8 +22,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         session_start();
         $_SESSION['User_ID'] = $user['User_ID'];
         $_SESSION['User_name'] = $user['User_name'];
+
         echo "Đăng nhập thành công!";
-        header("Location: main.php");
+        echo $user['User_name'];
+        header("Location: ../index.php");
     } else {
         echo "Email hoặc mật khẩu không chính xác. Vui lòng thử lại.";
     }

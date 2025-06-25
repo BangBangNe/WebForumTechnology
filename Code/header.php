@@ -23,9 +23,17 @@
           </div>
       
             <div class="phai">
-                <button class="login-btn" onclick="window.location.href='index.php?action=logout';">Đăng Xuất</button>
-                <button class="login-btn" onclick="window.location.href='Code/signinUP.php';">Đăng Nhập</button>   
-                <button class="chuong-thong-bao"><img src="icon/bell.png" alt=""></button>
+              <?php
+
+                // Trong phần giao diện:
+                if (isset($_SESSION['User_ID'])) {
+                    echo '<span class="user-info">Xin chào, ' . htmlspecialchars($_SESSION['User_name']) . '</span>';
+                    echo '<button class="login-btn" onclick="window.location.href=\'index.php?action=logout\';">Đăng Xuất</button>';
+                } else {
+                    echo '<button class="login-btn" onclick="window.location.href=\'Code/signinUP.php\';">Đăng Nhập</button>';
+                }
+              ?> 
+              <button class="chuong-thong-bao"><img src="icon/bell.png" alt=""></button>
             </div>
         </div>
     </header>
