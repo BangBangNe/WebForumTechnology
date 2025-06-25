@@ -4,7 +4,7 @@ body {
 .main {
   display: flex;
   justify-content: center;
-  padding: 0 20px 20px 20px;
+
 }
 .users {
   width: 100%;
@@ -35,7 +35,8 @@ div.fas.fa-search{
   gap: 20px;
   border: 1px solid #ccc;
   border-radius: 6px;
-  padding: 10px;
+  align-items: center;
+  padding-left: 10px;
 }
 .sap-xep a {
   text-decoration: none;
@@ -52,7 +53,7 @@ div.fas.fa-search{
 .time {
   display: flex;
   justify-content: end;
-  padding: 5px;
+  padding: 10px;
 }
 .time .sub-time {
   display: flex;
@@ -84,8 +85,8 @@ div.fas.fa-search{
 }
 
 .anh {
-  width: 80px;
-  height: 80px;
+  width: 90px;
+  height: 90px;
   flex-shrink: 0;
   border-radius: 50%;
   overflow: hidden;
@@ -99,8 +100,16 @@ div.fas.fa-search{
 }
 .thongtin h4 {
   margin-top: 0;
-  margin-bottom: 0;
+  margin-bottom: 5px;
+  font-size: 22px;
 }
 .sidebar {
   padding: 20px;
+}
+
+/* .thongtin{
+  
+} */
+.vi-tri,.theo-doi,.chuyen-nganh{
+  padding-top: 5px;
 }
