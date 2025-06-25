@@ -1,3 +1,37 @@
+<?php 
+include 'connect.php';
+
+$sort = $_GET['sort'] ?? null;
+$follower_id = $_GET['followed_by'] ?? null;
+
+// Nếu có lọc theo người đang theo dõi
+if ($follower_id) {
+    $follower_id = intval($follower_id);
+    $sql = "SELECT u.*
+            FROM users u
+            JOIN followers f ON u.User_ID = f.followed_id
+            WHERE f.follower_id = $follower_id";
+
+    // Nếu có thêm sắp xếp A-Z hoặc Z-A
+    if ($sort == 'az') {
+        $sql .= " ORDER BY SUBSTRING_INDEX(User_name, ' ', -1) ASC";
+    } elseif ($sort == 'za') {
+        $sql .= " ORDER BY SUBSTRING_INDEX(User_name, ' ', -1) DESC";
+    }
+} else {
+    // Không có lọc theo người đang theo dõi
+    $sql = "SELECT * FROM users";
+
+    if ($sort == 'az') {
+        $sql .= " ORDER BY SUBSTRING_INDEX(User_name, ' ', -1) ASC";
+    } elseif ($sort == 'za') {
+        $sql .= " ORDER BY SUBSTRING_INDEX(User_name, ' ', -1) DESC";
+    }
+}
+
+$result = $conn->query($sql);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,308 +51,41 @@
                         <form><input type="text" placeholder="Tìm kiếm..." /></form>
                     </div>
                     <div class="sap-xep">
-                        <a href=""><span>Tìm kiếm theo TOP |</span></a>
-                        <a href=""><span>Kinh Nghiệm</span></a>
-                        <a href=""><span>Rate</span></a>
-                        <a href=""><span>Theo dõi</span></a>
+                        <b>Tìm kiếm theo TOP |</b>
+                        <span><a href="">Kinh Nghiệm</a></span>
+                        <span><a href="">Rate</a></span>
+                        <span><a href="">Theo dõi</a></span>
                     </div>
                 </div>
             <div class="time">
                 <div class="sub-time">
-                    <a href=""><span>Người đang theo dõi</span></a>
-                    <a href=""><span>A-Z</span></a>
+                    <a href="index.php?page=user&followed_by=5"><span>Người đang theo dõi</span></a>
+                    <a href="index.php?page=user&sort=az"><span>A-Z</span></a>
+                    <a href="index.php?page=user&sort=za"><span>Z-A</span></a>
                 </div>
             </div>
-            <br>
             <div class="trang-user">
-                <div class="user">
-                    <div class="anh"><img src="Anh/Hina_(Dress).png" alt=""></div>
-                        <div class="thongtin">
-                            <h4>Hina_Dress</h4>
-                            <div class="sex">Nữ</div>
-                            <div class="vi-tri">Striker</div>
-                            <div class="rate">8 sao</div>
-                        </div>
-                </div>
-                <div class="user">
-                    <div class="anh"><img src="Anh/Saori_(Dress).png" alt=""></div>
-                    <div class="thongtin">
-                        <h4>Saori_Dress</h4>
-                        <div class="sex">Nữ</div>
-                        <div class="vi-tri">Striker</div>
-                        <div class="rate">8 sao</div>
-                    </div>
-                </div>
-                <div class="user">
-                    <div class="anh"><img src="Anh/Hanako_(Swimsuit).png" alt=""></div>
-                    <div class="thongtin">
-                        <h4>Hanako_Swimsuit</h4>
-                        <div class="sex">Nữ</div>
-                        <div class="vi-tri">Striker</div>
-                        <div class="rate">8 sao</div>
-                    </div>
-                </div>
-                <div class="user">
-                    <div class="anh"><img src="Anh/Hoshino_(Battle).jpg" alt=""></div>
-                    <div class="thongtin">
-                        <h4>Hoshino_Battle</h4>
-                        <div class="sex">Nữ</div>
-                        <div class="vi-tri">Striker</div>
-                        <div class="rate">8 sao</div>
-                    </div>
-                </div>
-                <div class="user">
-                    <div class="anh"><img src="Anh/Hoshino_(Swimsuit).png" alt=""></div>
-                    <div class="thongtin">
-                        <h4>Hoshino_Swimsuit</h4>
-                        <div class="sex">Nữ</div>
-                        <div class="vi-tri">Striker</div>
-                        <div class="rate">8 sao</div>
-                    </div>
-                </div>
-                <div class="user">
-                    <div class="anh"><img src="Anh/Iroha.png" alt=""></div>
-                    <div class="thongtin">
-                        <h4>Iroha</h4>
-                        <div class="sex">Nữ</div>
-                        <div class="vi-tri">Striker</div>
-                        <div class="rate">8 sao</div>
-                    </div>
-                </div>
-                <div class="user">
-                    <div class="anh"><img src="Anh/Ibuki.png" alt=""></div>
-                    <div class="thongtin">
-                        <h4>Ibuki</h4>
-                        <div class="sex">Nữ</div>
-                        <div class="vi-tri">Striker</div>
-                        <div class="rate">8 sao</div>
-                    </div>
-                </div>
-                <div class="user">
-                    <div class="anh"><img src="Anh/Mika.png" alt=""></div>
-                    <div class="thongtin">
-                        <h4>Mika</h4>
-                        <div class="sex">Nữ</div>
-                        <div class="vi-tri">Striker</div>
-                        <div class="rate">8 sao</div>
-                    </div>
-                </div>
-                <div class="user">
-                    <div class="anh"><img src="Anh/Shiroko-terror.png" alt=""></div>
-                    <div class="thongtin">
-                        <h4>Shiroko-terror</h4>
-                        <div class="sex">Nữ</div>
-                        <div class="vi-tri">Striker</div>
-                        <div class="rate">8 sao</div>
-                    </div>
-                </div>
-                <div class="user">
-                    <div class="anh"><img src="Anh/Wakamo.png" alt=""></div>
-                    <div class="thongtin">
-                        <h4>Wakamo</h4>
-                        <div class="sex">Nữ</div>
-                        <div class="vi-tri">Striker</div>
-                        <div class="rate">8 sao</div>
-                    </div>
-                </div>
-                <div class="user">
-                    <div class="anh"><img src="Anh/Kisaki.png" alt=""></div>
-                    <div class="thongtin">
-                        <h4>Kisaki</h4>
-                        <div class="sex">Nữ</div>
-                        <div class="vi-tri">Special</div>
-                        <div class="rate">8 sao</div>
-                    </div>
-                </div>
-                <div class="user">
-                    <div class="anh"><img src="Anh/Rio.png" alt=""></div>
-                    <div class="thongtin">
-                        <h4>Rio</h4>
-                        <div class="sex">Nữ</div>
-                        <div class="vi-tri">Special</div>
-                        <div class="rate">8 sao</div>
-                    </div>
-                </div>
-                <div class="user">
-                    <div class="anh"><img src="Anh/Seia.png" alt=""></div>
-                    <div class="thongtin">
-                        <h4>Seia</h4>
-                        <div class="sex">Nữ</div>
-                        <div class="vi-tri">Striker</div>
-                        <div class="rate">8 sao</div>
-                    </div>
-                </div>
-                <div class="user">
-                    <div class="anh"><img src="Anh/Hikari.png" alt=""></div>
-                    <div class="thongtin">
-                        <h4>Hikari</h4>
-                        <div class="sex">Nữ</div>
-                        <div class="vi-tri">Striker</div>
-                        <div class="rate">8 sao</div>
-                    </div>
-                </div>
-                <div class="user">
-                    <div class="anh"><img src="Anh/Nozomi.png" alt=""></div>
-                    <div class="thongtin">
-                        <h4>Nozomi</h4>
-                        <div class="sex">Nữ</div>
-                        <div class="vi-tri">Striker</div>
-                        <div class="rate">8 sao</div>
-                    </div>
-                </div>
-                <div class="user">
-                    <div class="anh"><img src="Anh/Mari_(Idol).png" alt=""></div>
-                    <div class="thongtin">
-                        <h4>Mari_Idol</h4>
-                        <div class="sex">Nữ</div>
-                        <div class="vi-tri">Striker</div>
-                        <div class="rate">8 sao</div>
-                    </div>
-                </div>
-                <div class="user">
-                    <div class="anh"><img src="Anh/Hina_(Dress).png" alt=""></div>
-                        <div class="thongtin">
-                            <h4>Hina_Dress</h4>
-                            <div class="sex">Nữ</div>
-                            <div class="vi-tri">Striker</div>
-                            <div class="rate">8 sao</div>
-                        </div>
-                </div>
-                <div class="user">
-                    <div class="anh"><img src="Anh/Saori_(Dress).png" alt=""></div>
-                    <div class="thongtin">
-                        <h4>Saori_Dress</h4>
-                        <div class="sex">Nữ</div>
-                        <div class="vi-tri">Striker</div>
-                        <div class="rate">8 sao</div>
-                    </div>
-                </div>
-                <div class="user">
-                    <div class="anh"><img src="Anh/Hanako_(Swimsuit).png" alt=""></div>
-                    <div class="thongtin">
-                        <h4>Hanako_Swimsuit</h4>
-                        <div class="sex">Nữ</div>
-                        <div class="vi-tri">Striker</div>
-                        <div class="rate">8 sao</div>
-                    </div>
-                </div>
-                <div class="user">
-                    <div class="anh"><img src="Anh/Hoshino_(Battle).jpg" alt=""></div>
-                    <div class="thongtin">
-                        <h4>Hoshino_Battle</h4>
-                        <div class="sex">Nữ</div>
-                        <div class="vi-tri">Striker</div>
-                        <div class="rate">8 sao</div>
-                    </div>
-                </div>
-                <div class="user">
-                    <div class="anh"><img src="Anh/Hoshino_(Swimsuit).png" alt=""></div>
-                    <div class="thongtin">
-                        <h4>Hoshino_Swimsuit</h4>
-                        <div class="sex">Nữ</div>
-                        <div class="vi-tri">Striker</div>
-                        <div class="rate">8 sao</div>
-                    </div>
-                </div>
-                <div class="user">
-                    <div class="anh"><img src="Anh/Iroha.png" alt=""></div>
-                    <div class="thongtin">
-                        <h4>Iroha</h4>
-                        <div class="sex">Nữ</div>
-                        <div class="vi-tri">Striker</div>
-                        <div class="rate">8 sao</div>
-                    </div>
-                </div>
-                <div class="user">
-                    <div class="anh"><img src="Anh/Ibuki.png" alt=""></div>
-                    <div class="thongtin">
-                        <h4>Ibuki</h4>
-                        <div class="sex">Nữ</div>
-                        <div class="vi-tri">Striker</div>
-                        <div class="rate">8 sao</div>
-                    </div>
-                </div>
-                <div class="user">
-                    <div class="anh"><img src="Anh/Mika.png" alt=""></div>
-                    <div class="thongtin">
-                        <h4>Mika</h4>
-                        <div class="sex">Nữ</div>
-                        <div class="vi-tri">Striker</div>
-                        <div class="rate">8 sao</div>
-                    </div>
-                </div>
-                <div class="user">
-                    <div class="anh"><img src="Anh/Shiroko-terror.png" alt=""></div>
-                    <div class="thongtin">
-                        <h4>Shiroko-terror</h4>
-                        <div class="sex">Nữ</div>
-                        <div class="vi-tri">Striker</div>
-                        <div class="rate">8 sao</div>
-                    </div>
-                </div>
-                <div class="user">
-                    <div class="anh"><img src="Anh/Wakamo.png" alt=""></div>
-                    <div class="thongtin">
-                        <h4>Wakamo</h4>
-                        <div class="sex">Nữ</div>
-                        <div class="vi-tri">Striker</div>
-                        <div class="rate">8 sao</div>
-                    </div>
-                </div>
-                <div class="user">
-                    <div class="anh"><img src="Anh/Kisaki.png" alt=""></div>
-                    <div class="thongtin">
-                        <h4>Kisaki</h4>
-                        <div class="sex">Nữ</div>
-                        <div class="vi-tri">Special</div>
-                        <div class="rate">8 sao</div>
-                    </div>
-                </div>
-                <div class="user">
-                    <div class="anh"><img src="Anh/Rio.png" alt=""></div>
-                    <div class="thongtin">
-                        <h4>Rio</h4>
-                        <div class="sex">Nữ</div>
-                        <div class="vi-tri">Special</div>
-                        <div class="rate">8 sao</div>
-                    </div>
-                </div>
-                <div class="user">
-                    <div class="anh"><img src="Anh/Seia.png" alt=""></div>
-                    <div class="thongtin">
-                        <h4>Seia</h4>
-                        <div class="sex">Nữ</div>
-                        <div class="vi-tri">Striker</div>
-                        <div class="rate">8 sao</div>
-                    </div>
-                </div>
-                <div class="user">
-                    <div class="anh"><img src="Anh/Hikari.png" alt=""></div>
-                    <div class="thongtin">
-                        <h4>Hikari</h4>
-                        <div class="sex">Nữ</div>
-                        <div class="vi-tri">Striker</div>
-                        <div class="rate">8 sao</div>
-                    </div>
-                </div>
-                <div class="user">
-                    <div class="anh"><img src="Anh/Nozomi.png" alt=""></div>
-                    <div class="thongtin">
-                        <h4>Nozomi</h4>
-                        <div class="sex">Nữ</div>
-                        <div class="vi-tri">Striker</div>
-                        <div class="rate">8 sao</div>
-                    </div>
-                </div>
-                <div class="user">
-                    <div class="anh"><img src="Anh/Mari_(Idol).png" alt=""></div>
-                    <div class="thongtin">
-                        <h4>Mari_Idol</h4>
-                        <div class="sex">Nữ</div>
-                        <div class="vi-tri">Striker</div>
-                        <div class="rate">8 sao</div>
-                    </div>
-                </div>
+            <?php 
+                if ($result->num_rows > 0) {
+                    // Lặp qua từng dòng dữ liệu
+                    while($row = $result->fetch_assoc()) {
+                        echo '
+                        <div class="user">
+                            <div class="anh"><img src="' . htmlspecialchars($row["avatar"]) . '" alt=""></div>
+                            <div class="thongtin">
+                                <h4>' . htmlspecialchars($row["User_name"]) . '</h4>
+                                <div class="vi-tri"><b>Nơi ở:</b> ' . htmlspecialchars($row["location"]) . '</div>
+                                <div class="theo-doi"><b>Lượt theo dõi: </b>' . htmlspecialchars($row["follow"]) . '</div>
+                                <div class="chuyen-nganh"><b>BIO: </b>' . htmlspecialchars($row["bio"]) . '</div>
+                            </div>
+                        </div>';
+                    }
+                } else {
+                    echo "Không có dữ liệu.";
+                }
+
+                $conn->close();
+                ?>
             </div>
         </div>
     </div>    
