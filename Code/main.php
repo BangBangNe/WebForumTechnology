@@ -20,7 +20,7 @@
       <div class="questions-header">
         <h2>Diễn đàn câu hỏi</h2>
         <div class="user-actions">
-          <button class="ask-btn">Đặt câu hỏi</button>
+          <button class="ask-btn" onclick="location.href='index.php?page=cau_hoi'">Đặt câu hỏi</button>
           <button id="toggleFilterBtn" class="filter-toggle-btn">Lọc</button>
           <div class="user-avatar" title="User profile"></div>
         </div>

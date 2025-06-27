@@ -1,4 +1,5 @@
-<?php $loginError = isset($_GET['error']) ? $_GET['error'] : ''; ?>
+<?php 
+$loginError = isset($_GET['error']) ? $_GET['error'] : ''; ?>
 
 <html>
 <head>

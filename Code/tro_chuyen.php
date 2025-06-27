@@ -1,9 +1,13 @@
 <?php
 session_start();
 require 'db_connect.php';
-$current_user_id = $_SESSION['user_id'] ?? 6; // Giả sử user_id là 6 nếu chưa đăng nhập
-if (!$current_user_id) exit('Bạn chưa đăng nhập');
 
+if (!$_SESSION['User_ID']) {
+    header('location:signInUP.php');
+    exit('Bạn chưa đăng nhập');
+}
+
+$current_user_id = $_SESSION['User_ID']; 
 // Lấy danh sách đối tượng đã từng chat
 $sql = "
     SELECT 

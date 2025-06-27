@@ -18,7 +18,7 @@
       <div class="posts-header">
         <h2>Diễn đàn thảo luận.</h2>
         <div class="user-actions">
-          <button class="ask-btn">Tạo bài viết</button>
+          <button class="ask-btn" onclick="location.href='index.php?page=bai_post'">Tạo bài viết</button>
           <button id="toggleFilterBtn" class="filter-toggle-btn">Lọc</button>
           <div class="user-avatar" title="User profile"></div>
         </div>

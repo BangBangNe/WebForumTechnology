@@ -1,0 +1,147 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f6f6f6;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .main_tag {
+    max-width: 1000px;
+    margin: 30px auto;
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+  }
+  
+  h2 {
+    font-size: 24px;
+    color: #222;
+  }
+  
+  .description {
+    color: #666;
+    margin-bottom: 20px;
+  }
+  
+  .tag-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 20px;
+  }
+  
+  .tag-card {
+    background-color: #e1ecf4;
+    border: 1px solid #c6d9ec;
+    border-radius: 6px;
+    padding: 12px 14px;
+    text-decoration: none;
+    transition: 0.2s ease;
+  }
+  
+  .tag-card:hover {
+    background-color: #d0e3f1;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  }
+  
+  .tag-title {
+    font-size: 16px;
+    color: #39739d;
+    font-weight: bold;
+  }
+  
+  .tag-count {
+    font-size: 13px;
+    color: #5c5c5c;
+    margin-top: 5px;
+  }
+
+
+  /* Reset cơ bản */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background-color: #f5f7fa;
+    color: #333;
+  }
+  
+  .container-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .main-tagques {
+    background-color: white;
+    max-width: 800px;
+    width: 100%;
+    border-radius: 10px;
+  }
+  
+  h2 {
+    font-size: 24px;
+    margin-bottom: 30px;
+    color: #222;
+    border-bottom: 2px solid #e2e6ea;
+    padding-bottom: 10px;
+  }
+  
+  /* Câu hỏi */
+  .question-item {
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .question-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #0074cc;
+    text-decoration: none;
+  }
+  
+  .question-title:hover {
+    text-decoration: underline;
+    color: #005999;
+  }
+  
+  .meta {
+    font-size: 13px;
+    color: #888;
+    margin-top: 6px;
+  }
+  
+  /* Tags */
+  .tags {
+    margin-top: 10px;
+  }
+  
+  .tag {
+    display: inline-block;
+    background-color: #e1ecf4;
+    color: #39739d;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    margin-right: 8px;
+  }
+  
+  p {
+    font-size: 15px;
+    color: #555;
+  }
+/* nút quay lại */
+.back-button {
+    display: inline-block;
+    margin-bottom: 20px;
+    text-decoration: none;
+    color: #0074cc;
+    font-size: 14px;
+  }
+  
+  .back-button:hover {
+    text-decoration: underline;
+    color: #005999;
+  }
+  
+  

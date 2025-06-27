@@ -10,6 +10,11 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
   header("Location: index.php");
   exit();
 }
+
+
+$page = isset($_GET['page']) ? $_GET['page'] : 'main';
+$allowed_pages = ['main', 'user', 'user_infor', 'tag', 'mainPost', 'tro_chuyen','check','bai_post','cau_hoi']; // an toàn tránh include linh tinh
+
 ?>
 
 
@@ -25,6 +30,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
   <link rel="stylesheet" href="Style/header.css">
   <link rel="stylesheet" href="Style/user.css">
   <link rel="stylesheet" href="Style/user_infor.css">
+    <link rel="stylesheet" href="Style/tag.css">
   <title>Stack Overflow - Newest Questions</title>
 </head>
 
@@ -34,8 +40,6 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
     <nav class="navigate" style="width:20%;"> <?php include 'Code/nav.php'; ?> </nav>
     <div id="main-content" class="container" style="width:70%;">
       <?php
-      $page = isset($_GET['page']) ? $_GET['page'] : 'main';
-      $allowed_pages = ['main', 'user', 'user_infor', 'tag', 'mainPost','tro_chuyen']; // an toàn tránh include linh tinh
       if (in_array($page, $allowed_pages)) {
         if ($page === 'tro_chuyen') {
           header("Location: ../WebForumTechnology/Code/tro_chuyen.php");

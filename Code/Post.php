@@ -1,6 +1,6 @@
 <?php
 include 'connect.php';
-
+session_start(); // Bắt đầu phiên làm việc
 // Lấy bài viết
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     echo "<h2>Không tìm thấy bài viết.</h2>";
@@ -28,6 +28,10 @@ $link = "SELECT c.content, u.User_name, u.avatar
             WHERE c.post_id = $id";
 
 $comments = mysqli_query($conn, $link);
+
+$user_id = $_SESSION['User_ID'] ?? '0'; 
+$user_result = mysqli_query($conn, "SELECT * FROM users WHERE User_ID = $user_id");
+$user = mysqli_fetch_assoc($user_result);
 
 ?>
 
@@ -88,6 +92,7 @@ $comments = mysqli_query($conn, $link);
 
 <body>
     <div class="container-wrapper">
+        <?php echo $post['post_id'] ?>
         <div class="post-container">
             <?php
             if ($result && $result->num_rows > 0) {
@@ -105,11 +110,12 @@ $comments = mysqli_query($conn, $link);
             }
 
             ?>
-                </br></br></br></br></br>
+            </br></br></br></br></br>
             <div class="comment_section">
                 <div class="comment_input">
-                    <img src="<?= $user['avatar'] ?? 'test.jpg' ?>" alt="" class="comment_avata">
-                    <textarea name="comment" class="comment_input_box" data-ques-id="<?= $post['post_id'] ?>" placeholder="Viết bình luận ....."></textarea>
+                     <img src="<?php echo $user['avatar'] ?? '../WebForumTechnology/icon/test.jpg' ?>" alt="Ảnh" class="comment_avata">
+                    <textarea name="comment" class="comment_input_box" data-post-id="<?= $post['post_id'] ?>" placeholder="Viết bình luận ....."></textarea>
+                    <button class="send_comment_btn">Gửi bình luận</button>
                 </div>
                 <div class="comment_list">
                     <?php if (empty($comments)): ?>
@@ -130,8 +136,41 @@ $comments = mysqli_query($conn, $link);
 
 
         </div>
-
     </div>
+    <script>
+        document.querySelector('.send_comment_btn').addEventListener('click', function() {
+            const textarea = document.querySelector('.comment_input_box');
+            const comment = textarea.value.trim();
+            const postId = textarea.dataset.postId;
+
+            if (!comment) return;
+
+            const formData = new FormData();
+            formData.append('comment', comment);
+            formData.append('post_id', postId);
+
+            fetch('Code/xuly_post.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(res => res.text())
+                .then(data => {
+                    if (data.trim() === 'LOGIN_REQUIRED') {
+                        // ✅ Tự động nhảy sang trang đăng nhập
+                        window.location.href = 'Code/signInUP.php';
+                        return;
+                    }
+
+                    // Nếu login rồi thì xử lý bình luận
+                    const commentList = document.querySelector('.comment_list');
+                    commentList.insertAdjacentHTML('beforeend', data);
+                    textarea.value = '';
+                })
+                .catch(err => {
+                    console.error("Lỗi gửi bình luận:", err);
+                });
+        });
+    </script>
 
 </body>
 

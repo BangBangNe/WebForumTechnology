@@ -1,13 +1,15 @@
 <?php
 include 'db_connect.php';
-session_start();
 
-// Lấy user có ID = 6
-// Lấy user có ID = 6
-$you_id = 5; // ID người bạn đang muốn nhắn tin với
-$user_id = 6; // Người đang đăng nhập
-$_SESSION['User_ID'] = $user_id;
 
+$you_id=$_GET['user_id'] ?? null; // ID người bạn muốn nhắn tin, nếu không có thì sẽ lấy ID của người đang đăng nhập
+$user_id=$_SESSION['User_ID']?? $you_id; // Người đang đăng nhập
+
+
+
+if($you_id == null ) {
+    $you_id=$user_id; // Nếu không có ID người bạn muốn nhắn tin, thì lấy ID của người đang đăng nhập
+}
 $user_result = mysqli_query($link, "SELECT * FROM users WHERE User_ID = $user_id");
 $user = mysqli_fetch_assoc($user_result);
 
@@ -35,7 +37,7 @@ if ($conversation) {
 }
 
 
-// Lấy câu hỏi mới nhất của user
+// Lấy câu hỏi và bài viết mới nhất của user
 $question_result = mysqli_query($link, "SELECT * FROM questions WHERE ID_user = $you_id ORDER BY Date_tao DESC");
 $questions = [];
 while ($row = mysqli_fetch_assoc($question_result)) {
@@ -70,19 +72,54 @@ $is_following = mysqli_num_rows($is_following) > 0;
                 <div class="container_up">
 
                     <div class="container_avata">
-                        <img src="../WebForumTechnology/icon/test.jpg" alt="Ảnh"> <!-- Sài tạm ảnh test -->
-
+                        <img src="<?php echo $user['avatar'] ?? '../WebForumTechnology/icon/test.jpg' ?>" alt="Ảnh">
+                        <?php if ($you_id == $user_id): ?>
+                            <form id="avatarForm" action="Code/xuly_anh.php" method="POST" enctype="multipart/form-data" style="margin-top: 10px;">
+                                <input type="file" name="avatar" id="avatarInput" accept="image/*" style="display: none;" onchange="document.getElementById('avatarForm').submit();">
+                                <button type="button" onclick="document.getElementById('avatarInput').click();">Đổi ảnh đại diện</button>
+                            </form>
+                        <?php endif; ?>
                         <!-- Theo doi -->
                         <div class="count" style="text-align: left;">
                             <div class="num" id="followerCount"><?= $follower_count ?? 0 ?></div>
                             <div class="text">nguời theo dõi</div>
                         </div>
-                        <div class="button" id="followBtn"><?= $is_following ? 'Đang theo dõi' : 'Theo dõi' ?></div>
+                        <?php if ($you_id != $user_id): ?>
+                            <div class="button" id="followBtn"><?= $is_following ? 'Đang theo dõi' : 'Theo dõi' ?></div>
+                        <?php endif;?>
 
                         <!-- Chat -->
-                        <div class="container_chat">Nhắn tin</div>
+                        <?php if ($you_id != $user_id): ?>>
+                            <div class="container_chat">Nhắn tin</div>
+                        <?php endif; ?>
                     </div>
-
+                    <div class="chat_box">
+                        <div class="chat_box_header">
+                            <img src="<?= $user['avatar'] ?? 'test.jpg' ?>" alt="" class="chat_avata">
+                            <div class="chat_infor">
+                                <h3><?= $user['User_name'] ?></h3>
+                                <p>2 giờ trước.<i class="fas fa-globe-asia"></i></p>
+                            </div>
+                            <div class="chat_actions">
+                                <button class="chat_mini">-</button>
+                                <button class="chat_close">x</button>
+                            </div>
+                        </div>
+                        <div class="chat_content">
+                            <?php foreach ($chat_messages as $msg): ?>
+                                <?php $msg_class = ($msg['sender_id'] == $user_id) ? 'sent' : 'received'; ?>
+                                <div class="chat_message <?= $msg_class ?>">
+                                    <div class="message_text"><?= htmlspecialchars($msg['message']) ?></div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                        <form action="" class="chat_input">
+                            <input type="hidden" id="sender_id" value="<?= $user_id ?>"> <!-- có thể đổi -->
+                            <input type="hidden" id="receiver_id" value="<?= $you_id ?>"> <!-- có thể đổi -->
+                            <input type="text" class="chat_input_box" id="chatInput" placeholder="Nhập tin nhắn." required>
+                            <button type="submit" class="send_btn" id="sendBtn"><i class="fas fa-paper-plane"></i></button>
+                        </form>
+                    </div>
                     <div class="space"> </div>
 
                     <div class="container_name">
@@ -154,8 +191,7 @@ $is_following = mysqli_num_rows($is_following) > 0;
                         ?>
                         <div class="container_post">
                             <div class="post_header">
-                                <!-- <img src="(?= $user['avatar'] ?? '../WebForumTechnology/icon/test.jpg' ?>" alt="" class="post_avata"> --> <!-- Sài tạm ảnh test -->
-                                <img src="../WebForumTechnology/icon/test.jpg" alt="Ảnh">
+                                <img src="<?php echo $user['avatar'] ?? '../WebForumTechnology/icon/test.jpg' ?>" alt="Ảnh">
                                 <div class="post_user_infor">
                                     <h3><?= $user['User_name'] ?></h3>
                                     <p><?= $question['Date_tao'] ?? 'Không rõ ngày' ?> . <i class="fas fa-globe-asia"></i></p>
@@ -197,8 +233,7 @@ $is_following = mysqli_num_rows($is_following) > 0;
 
                             <div class="comment_section">
                                 <div class="comment_input">
-                                    <!-- <img src="(?="" $user['avatar'] ?? 'test.jpg' ?>" alt=""> --> <!-- Thay dấu ( thành dấu < -->
-                                    <img src="../WebForumTechnology/icon/test.jpg" alt="Ảnh"> <!-- Sài tạm ảnh test -->
+                                    <img src="<?php echo $user['avatar'] ?? '../WebForumTechnology/icon/test.jpg' ?>" alt="Ảnh">
                                     <textarea name="comment" class="comment_input_box" data-ques-id="<?= $question['ID_Ques'] ?>" placeholder="Viết bình luận ....."></textarea>
                                 </div>
 
@@ -208,8 +243,7 @@ $is_following = mysqli_num_rows($is_following) > 0;
                                     <?php else: ?>
                                         <?php foreach ($comments as $c): ?>
                                             <div class="comment_item">
-                                                <!-- <img src="(?= $c['avatar'] ?? '../WebForumTechnology/icon/test.jpg' ?>" alt=""> --> <!-- Thay dấu ( thành dấu < -->
-                                                <img src="../WebForumTechnology/icon/test.jpg" alt="Ảnh"> <!-- Sài tạm ảnh test -->
+                                               <img src="<?php echo $user['avatar'] ?? '../WebForumTechnology/icon/test.jpg' ?>" alt="Ảnh">
                                                 <div class="comment_content">
                                                     <div class="comment_user"><?= htmlspecialchars($c['User_name']) ?></div>
                                                     <div class="comment_text"><?= htmlspecialchars($c['Comment']) ?></div>
