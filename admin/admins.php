@@ -1,5 +1,6 @@
 <?php
 // Kết nối CSDL
+session_start();
 $link = mysqli_connect("localhost", "root", "") or die("Không thể kết nối đến server này!");
 mysqli_select_db($link, "datadiendan") or die("Database này không tồn tại!");
 
@@ -19,9 +20,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (mysqli_num_rows($result) > 0) {
-        echo "Đăng nhập thành công!";
-        // Chuyển hướng đến trang khác 
-         header("Location: admin.php");
+    $admin = mysqli_fetch_assoc($result);
+
+    // Lưu vào session
+    $_SESSION['Admin_ID'] = $admin['admin_id'];         // hoặc tên cột phù hợp trong DB
+    $_SESSION['Admin_Name'] = $admin['admin_name'];     // tên admin
+
+    // Chuyển trang
+    header("Location: admin.php");
+    exit();
     } else {
         echo "Thông tin đăng nhập không chính xác. Vui lòng thử lại.";
     }

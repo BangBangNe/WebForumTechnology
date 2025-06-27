@@ -13,13 +13,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user_id = $_SESSION['User_ID'];
 
     if ($user_id && $comment && $ques_id) {
-        $rating = 0;
 
-        $stmt = $conn->prepare("INSERT INTO comments (Comment, ID_User, ID_Ques, Rating) VALUES (?, ?, ?, ?)");
+        $stmt = $conn->prepare("INSERT INTO comments (Comment, ID_User, ID_Ques) VALUES (?, ?, ?)");
         if (!$stmt) {
             die("Lỗi prepare: " . $conn->error);
         }
-        $stmt->bind_param("siii", $comment, $user_id, $ques_id, $rating);
+        $stmt->bind_param("sii", $comment, $user_id, $ques_id);
         $stmt->execute();
 
         // Lấy thông tin người dùng

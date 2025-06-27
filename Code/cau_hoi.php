@@ -2,7 +2,7 @@
 
 // Nếu chưa đăng nhập thì chuyển về trang đăng nhập
 if (!isset($_SESSION['User_ID'])) {
-    header("Location: signInUP.php");
+    header("Location: Code/signInUP.php");
     exit();
 }
 
@@ -11,7 +11,11 @@ include 'connect.php';
 $ID_user = $_SESSION['User_ID'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $mo_ta = $conn->real_escape_string($_POST['mo_ta']);
+    $mo_ta = $_POST['Mo_ta'];
+
+    echo $mo_ta;
+
+    $content = $_POST['content'];
     $id_tag = (int)$_POST['id_tag'];
 
     $hinh_anh = null;
@@ -24,11 +28,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $hinh_anh = $target_file;
     }
 
-    $sql = "INSERT INTO questions (Date_tao, Mo_ta, Hinh_anh, ID_Tags, ID_user, like_count)
-            VALUES (CURDATE(), '$mo_ta', " . ($hinh_anh ? "'$hinh_anh'" : "NULL") . ", $id_tag, $ID_user, 0)";
-    
+    $sql = "INSERT INTO questions (Date_tao, Mo_ta, Hinh_anh, ID_Tags, ID_user, like_count, content)
+            VALUES (CURDATE(), '$mo_ta', " . ($hinh_anh ? "'$hinh_anh'" : "NULL") . ", $id_tag, $ID_user, 0,'$content')";
+
     if ($conn->query($sql) === TRUE) {
-        header("Location: ../index.php");
+        header("Location: index.php");
         exit();
     } else {
         echo "Lỗi: " . $conn->error;
@@ -38,6 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -49,13 +54,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             color: #232629;
         }
-        
+
         .container-wrapper {
             margin: 0 auto;
             display: flex;
             justify-content: center;
         }
-        
+
         .form-container {
             background: white;
             border-radius: 5px;
@@ -63,18 +68,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             width: 100%;
             max-width: 800px;
         }
-        
+
         .form-container h2 {
             font-size: 22px;
             margin-bottom: 20px;
             font-weight: 600;
             color: #242729;
         }
-        
+
         .form-group {
             margin-bottom: 20px;
         }
-        
+
         label {
             display: block;
             font-weight: 600;
@@ -82,7 +87,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size: 15px;
         }
         
-        textarea, select {
+        input[type="Mo_ta"],
+        textarea,
+        select {
             width: 100%;
             padding: 10px;
             border: 1px solid #bbc0c4;
@@ -90,22 +97,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size: 14px;
             transition: border-color 0.15s ease-in-out;
         }
-        
+
         textarea {
             min-height: 150px;
             resize: vertical;
         }
-        
-        textarea:focus, select:focus {
+
+        textarea:focus,
+        select:focus {
             border-color: #6cbbf7;
             outline: none;
             box-shadow: 0 0 0 4px rgba(0, 149, 255, 0.15);
         }
-        
+
         .file-input {
             margin-top: 8px;
         }
-        
+
         .submit-btn {
             background-color: #0a95ff;
             color: white;
@@ -116,11 +124,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             cursor: pointer;
             transition: background-color 0.15s ease-in-out;
         }
-        
+
         .submit-btn:hover {
             background-color: #0077cc;
         }
-        
+
         .form-footer {
             margin-top: 30px;
             padding-top: 15px;
@@ -128,28 +136,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size: 13px;
             color: #6a737c;
         }
-        
+
         @media (max-width: 768px) {
             .container-wrapper {
                 padding: 10px;
             }
-            
+
             .form-container {
                 padding: 15px;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="container-wrapper">
         <div class="form-container">
             <h2>Đặt câu hỏi mới</h2>
             <form method="POST" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label for="mo_ta">Mô tả câu hỏi</label>
-                    <textarea id="mo_ta" name="mo_ta" required placeholder="Nhập chi tiết câu hỏi của bạn..."></textarea>
+                    <label for="Mo_ta">Tiêu đề câu hỏi:</label>
+                    <input type="Mo_ta" id="Mo_ta" name="title" required>
                 </div>
-                
+
+                <div class="form-group">
+                    <label for="content">Nội dung:</label>
+                    <textarea id="content" name="content" required placeholder="Nhập chi tiết câu hỏi của bạn..."></textarea>
+                </div>
+
+
                 <div class="form-group">
                     <label for="id_tag">Thẻ (Tag)</label>
                     <select id="id_tag" name="id_tag" required>
@@ -163,19 +178,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </select>
                     <small>Chọn thẻ phù hợp với chủ đề câu hỏi của bạn</small>
                 </div>
-                
+
                 <div class="form-group">
                     <label>Hình ảnh minh họa (nếu có)</label>
                     <input type="file" name="hinh_anh" accept="image/*" class="file-input">
                 </div>
-                
+
                 <button type="submit" class="submit-btn">Đăng câu hỏi</button>
             </form>
-            
+
             <div class="form-footer">
                 <p>Bằng cách đăng câu hỏi, bạn đồng ý với <a href="#">điều khoản sử dụng</a> và <a href="#">chính sách bảo mật</a> của chúng tôi.</p>
             </div>
         </div>
     </div>
 </body>
+
 </html>

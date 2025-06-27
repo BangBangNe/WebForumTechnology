@@ -1,10 +1,71 @@
 <?php
+session_start();
   $current_page = basename($_SERVER['PHP_SELF']); // Lấy tên file hiện tại, ví dụ: "index.php"
-?>
+include '../code/connect.php'?>
+
+
 <?php
-//dữ liệu từ database
-$labels = ['Tháng 1', 'Tháng 2', 'Tháng 3'];
-$values = [8000, 200, 150];
+    $sql = "
+    SELECT tags.Name AS tag_name, COUNT(posts.post_id) AS post_count
+    FROM tags
+    LEFT JOIN posts ON tags.ID_tag = posts.tag_id
+    GROUP BY tags.ID_tag, tags.Name
+    ORDER BY post_count DESC
+    ";
+
+    $result = $conn->query($sql);
+
+    $labelstron = [];
+    $valuestron = [];
+
+    if ($result && $result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $labelstron[] = $row['tag_name'];
+        $valuestron[] = (int)$row['post_count'];
+    }
+    } else {
+    $labelstron = ['Không có dữ liệu'];
+    $valuestron = [0];
+    }
+
+    // Đếm bài viết theo tháng
+    $sql_months = "
+        SELECT 
+            MONTH(created_at) AS month,
+            COUNT(*) AS post_count
+        FROM posts
+        GROUP BY MONTH(created_at)
+        ORDER BY MONTH(created_at)
+    ";
+
+    $result_months = $conn->query($sql_months);
+
+    $labelscot = [];
+    $valuescot = [];
+
+    $month_names = [
+        1 => 'Tháng 1', 2 => 'Tháng 2', 3 => 'Tháng 3', 4 => 'Tháng 4',
+        5 => 'Tháng 5', 6 => 'Tháng 6', 7 => 'Tháng 7', 8 => 'Tháng 8',
+        9 => 'Tháng 9', 10 => 'Tháng 10', 11 => 'Tháng 11', 12 => 'Tháng 12'
+    ];
+
+    if ($result_months && $result_months->num_rows > 0) {
+        while ($row = $result_months->fetch_assoc()) {
+            $month_num = (int)$row['month'];
+            $labelscot[] = $month_names[$month_num];
+            $valuescot[] = (int)$row['post_count'];
+        }
+    } else {
+        $labelscot = ['Không có dữ liệu'];
+        $valuescot = [0];
+    }
+
+    if (!isset($_SESSION['Admin_ID'])) {
+        header("Location: admin_login.php");
+        exit();
+    }
+
+
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -121,7 +182,7 @@ $values = [8000, 200, 150];
         </div>
         <div class="right">
             <span>xem trang web</span>
-            <span>Hello phamhoanglong</span>
+            <span>Hello  <?php echo htmlspecialchars($_SESSION['Admin_Name']);?></span>
         </div>
     </div>
         
@@ -129,15 +190,24 @@ $values = [8000, 200, 150];
         <div class="sidebar">
         <ul>
             <li class="active" data-url="tongquan.php">Tổng quan</li>
-            <li data-url="thongke.php">Thống kê</li>
             <li data-url="baiviet.php">Bài viết</li>
+            <li data-url="cauhoi.php">Câu hỏi</li>
             <li data-url="binhluan.php">Bình luận</li>
             <li data-url="phanhoi.php">Phản hồi</li>
             <li data-url="thanhvien.php">Thành viên</li>
         </ul>
         </div>
         <div class="content" id="content-area">
-            <?php include 'tongquan.php'; ?>
+            <?php
+                $page = $_GET['page'] ?? 'tongquan';
+                $allowed_pages = ['tongquan', 'baiviet', 'binhluan', 'phanhoi', 'thanhvien','cauhoi.php'];
+
+                if (in_array($page, $allowed_pages)) {
+                    include $page . '.php';
+                } else {
+                    echo "<p>Trang không hợp lệ.</p>";
+                }
+            ?>
         </div>
     </div>
 
@@ -159,7 +229,7 @@ $values = [8000, 200, 150];
                 this.classList.add("active");
 
                 // ✅ Nếu nội dung có thẻ canvas với id là barChart thì vẽ lại biểu đồ
-                if (url === "thongke.php" && document.getElementById("barChart")) {
+                if (url === "tongquan.php" && document.getElementById("barChart")) {
                     drawChart();
                 }
                 })
@@ -173,65 +243,66 @@ $values = [8000, 200, 150];
 
         // ✅ Hàm vẽ biểu đồ Chart.js
         function drawChart() {
-            const labels = <?= json_encode($labels); ?>;
-            const values = <?= json_encode($values); ?>;
+    const pieLabels = <?= json_encode($labelstron); ?>;
+    const pieValues = <?= json_encode($valuestron); ?>;
+    const barLabels = <?= json_encode($labelscot); ?>;
+    const barValues = <?= json_encode($valuescot); ?>;
 
-            const barCtx = document.getElementById("barChart")?.getContext("2d");
-            const pieCtx = document.getElementById("pieChart")?.getContext("2d");
+    const barCtx = document.getElementById("barChart")?.getContext("2d");
+    const pieCtx = document.getElementById("pieChart")?.getContext("2d");
 
-            const data = {
-                labels: labels,
+    if (barCtx) {
+        new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: barLabels,
                 datasets: [{
-                    label: 'Doanh thu',
-                    data: values,
-                    backgroundColor: 'rgba(255, 159, 64, 0.6)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
+                    label: 'Số bài viết theo tháng',
+                    data: barValues,
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
                     borderWidth: 2
                 }]
-            };
-
-            if (barCtx) {
-                new Chart(barCtx, {
-                    type: 'bar',
-                    data: data,
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            title: {
-                                display: true,
-                                text: 'Doanh thu theo tháng'
-                            }
-                        }
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Thống kê số bài viết theo tháng'
                     }
-                });
+                }
             }
+        });
+    }
 
-            if (pieCtx) {
-                new Chart(pieCtx, {
-                    type: 'pie',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Tỷ lệ doanh thu',
-                            data: values,
-                            backgroundColor: [
-                                '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
-                                '#9966FF', '#FF9F40', '#66FF66', '#FF6666'
-                            ]
-                            
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            title: {
-                                display: true,
-                                text: 'Tỷ lệ doanh thu các tháng'
-                            }
-                        }
+    if (pieCtx) {
+        new Chart(pieCtx, {
+            type: 'pie',
+            data: {
+                labels: pieLabels,
+                datasets: [{
+                    label: 'Thẻ tags',
+                    data: pieValues,
+                    backgroundColor: [
+                        '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
+                        '#9966FF', '#FF9F40', '#66FF66', '#FF6666', '#C03931'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Số lượng tags trong bài viết'
                     }
-                });
+                }
             }
-        }
+        });
+    }
+}
+
     </script>
+    
 </html>

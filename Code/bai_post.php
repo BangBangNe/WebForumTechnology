@@ -3,7 +3,7 @@ include 'connect.php';
 
 // Kiểm tra đăng nhập
 if (!isset($_SESSION['User_ID'])) {
-    header('Location: signInUP.php');
+    header('Location: Code/signInUP.php');
     exit();
 }
 
@@ -14,20 +14,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $tag_id = $_POST['tag_id'];
     $user_id = $_SESSION['User_ID'];
     $created_at = date('Y-m-d H:i:s');
-    $last_updated = date('Y-m-d H:i:s');
-    $status = 1;
 
-    $stmt = $conn->prepare("INSERT INTO posts (user_id, tag_id, title, content, created_at, last_updated, status) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO posts (user_id, tag_id, title, content, created_at) VALUES (?, ?, ?, ?, ?)");
 
     if (!$stmt) {
         die("Lỗi prepare: " . $conn->error);
     }
 
-    $stmt->bind_param("iissssi", $user_id, $tag_id, $title, $content, $created_at, $last_updated, $status);
+    $stmt->bind_param("iisss", $user_id, $tag_id, $title, $content, $created_at);
 
 
     if ($stmt->execute()) {
-        header('Location: ../index.php');
+        header('Location: index.php');
         echo "Thêm bài viết thành công!";
     } else {
         echo "Lỗi khi thêm: " . $stmt->error;

@@ -1,3 +1,4 @@
+<?php include '../code/connect.php'; ?>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -5,15 +6,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tổng quan</title>
   <style>
+    .tunggtunggtunggsarhua {
+      display: flex;
+      gap: 20px;
+
+    }
+
+    .cot, .tron {
+      flex: 1;
+      background: #fff;
+      padding: 15px;
+      height: 400px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+    }
+    h1{
+      padding: 20px;
+    }
+  </style>
+  <style>
     body {
       font-family: Arial, sans-serif;
       background: #f0f4f8;
       margin: 0;
 
-    }
-
-    h1 {
-      margin-bottom: 20px;
     }
 
     .dashboard {
@@ -48,7 +64,7 @@
     .box .label {
       margin-top: 5px;
       margin-bottom: 5px;
-      font-size: 14px;
+      font-size: 24px;
     }
 
     .box .detail {
@@ -61,48 +77,66 @@
   </style>
 </head>
 <body>
+  <?php $tables = [
+    'posts' => 'Bài viết',
+    'users' => 'Thành viên',
+    'feedback' => 'Phản hồi',
+    'comments' => 'Bình luận',
+    'tags' => 'Thẻ',
+    'questions' => 'Câu hỏi'
+];
+
+$counts = [];
+$sumLike = 0;
+
+foreach ($tables as $table => $label) {
+  $sql = "SELECT COUNT(*) AS total FROM $table";
+  $result = $conn->query($sql);
+  $counts[$label] = ($result && $row = $result->fetch_assoc()) ? $row['total'] : 0;
+}
+
+$conn->close();
+?>
     <h1>Tổng quan</h1>
     <div class="dashboard">
         <div class="box orange">
-            <div class="number">0</div>
-            <div class="label">Sản phẩm</div>
+            <div class="number"><?= $counts['Bài viết'] ?? 0 ?></div>
+            <div class="label">Số lượng Bài viết</div>
             <div class="detail">Chi tiết ➜</div>
         </div>
         <div class="box green">
-            <div class="number">0</div>
-            <div class="label">Danh mục sản phẩm</div>
+            <div class="number"><?= $counts['Thành viên'] ?? 0 ?></div>
+            <div class="label">Danh sách người dùng</div>
             <div class="detail">Chi tiết ➜</div>
         </div>
         <div class="box blue">
-            <div class="number">0</div>
-            <div class="label">Bài viết</div>
+            <div class="number"><?= $counts['Phản hồi'] ?? 0 ?></div>
+            <div class="label">Lượt phản hồi</div>
             <div class="detail">Chi tiết ➜</div>
         </div>
         <div class="box red">
-            <div class="number">0</div>
-            <div class="label">Danh mục bài viết</div>
+            <div class="number"><?= $counts['Bình luận'] ?? 0 ?></div>
+            <div class="label">Lượt bình luận</div>
             <div class="detail">Chi tiết ➜</div>
         </div>
         <div class="box purple">
-            <div class="number">0</div>
-            <div class="label">Danh sách liên hệ</div>
+            <div class="number"><?= $counts['Câu hỏi'] ?? 0 ?></div>
+            <div class="label">Danh sách Câu hỏi</div>
             <div class="detail">Chi tiết ➜</div>
         </div>
         <div class="box pink">
-            <div class="number">0</div>
-            <div class="label">Thành viên</div>
-            <div class="detail">Chi tiết ➜</div>
-        </div>
-        <div class="box fuchsia">
-            <div class="number">0</div>
-            <div class="label">Kiểm duyệt</div>
-            <div class="detail">Chi tiết ➜</div>
-        </div>
-        <div class="box teal">
-            <div class="number">0</div>
-            <div class="label">Bình luận</div>
+            <div class="number"><?= $counts['Thẻ'] ?? 0 ?></div>
+            <div class="label">Thẻ tags</div>
             <div class="detail">Chi tiết ➜</div>
         </div>
     </div>
+    <br>
+    <br><br>
+    <h1>Thống kê</h1>
+<div class="tunggtunggtunggsarhua">
+  <div class="cot"><canvas id="barChart" width="300" height="150"></canvas></div>
+  <div class="tron"><canvas id="pieChart" width="300" height="300"></canvas></div>
+</div><script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </body>
 </html>

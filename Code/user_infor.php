@@ -2,12 +2,12 @@
 include 'db_connect.php';
 
 
-$you_id=$_GET['user_id'] ?? null; // ID người bạn muốn nhắn tin, nếu không có thì sẽ lấy ID của người đang đăng nhập
-$user_id=$_SESSION['User_ID']?? $you_id; // Người đang đăng nhập
+$you_id = $_GET['user_id'] ?? null; // ID người bạn muốn nhắn tin, nếu không có thì sẽ lấy ID của người đang đăng nhập
+$user_id = $_SESSION['User_ID'] ?? $you_id; // Người đang đăng nhập
 
 
-if($you_id == null ) {
-    $you_id=$user_id; // Nếu không có ID người bạn muốn nhắn tin, thì lấy ID của người đang đăng nhập
+if ($you_id == null) {
+    $you_id = $user_id; // Nếu không có ID người bạn muốn nhắn tin, thì lấy ID của người đang đăng nhập
 }
 $user_result = mysqli_query($link, "SELECT * FROM users WHERE User_ID = $you_id");
 $user = mysqli_fetch_assoc($user_result);
@@ -73,7 +73,7 @@ $is_following = mysqli_num_rows($is_following) > 0;
                     <div class="container_avata">
                         <img src="<?php echo $user['avatar'] ?? '../WebForumTechnology/icon/test.jpg' ?>" alt="Ảnh">
                         <?php if ($you_id == $user_id && isset($_SESSION['User_ID'])): ?>
-                            <form action="Code/cap_nhat.php" method="POST" style="margin-top: 10px;">
+                            <form action="index.php?page=cap_nhat" method="POST" style="margin-top: 10px;">
                                 <input type="hidden" name="user_id" value="<?= $user_id ?>">
                                 <button type="submit">Cập nhật thông tin cá nhân</button>
                             </form>
@@ -85,7 +85,7 @@ $is_following = mysqli_num_rows($is_following) > 0;
                         </div>
                         <?php if ($you_id != $user_id): ?>
                             <div class="button" id="followBtn"><?= $is_following ? 'Đang theo dõi' : 'Theo dõi' ?></div>
-                        <?php endif;?>
+                        <?php endif; ?>
 
                         <!-- Chat -->
                         <?php if ($you_id != $user_id): ?>
@@ -94,10 +94,10 @@ $is_following = mysqli_num_rows($is_following) > 0;
                     </div>
                     <div class="chat_box">
                         <div class="chat_box_header">
-                            <img src="<?= $user['avatar'] ?? 'test.jpg' ?>" alt="" class="chat_avata">
+                            <!-- <img src="(?= $user['avatar'] ?? 'test.jpg' ?>" alt="" class="chat_avata"> -->
+                            <img src="../uploads/icon/avatar_md.jpg" alt="" class="chat_avata">
                             <div class="chat_infor">
-                                <h3><?= $user['User_name'] ?></h3>
-                                <p>2 giờ trước.<i class="fas fa-globe-asia"></i></p>
+                                <h3><?= $user['User_name'] ?></h3>  
                             </div>
                             <div class="chat_actions">
                                 <button class="chat_mini">-</button>
@@ -198,7 +198,11 @@ $is_following = mysqli_num_rows($is_following) > 0;
                             </div>
 
                             <div class="post_content">
-                                <p class="post_text"><?= $question['Mo_ta'] ?? 'Không có nội dung câu hỏi' ?></p>
+                                <div class="post_text">
+                                    <h2><?= $question['Mo_ta'] ?? 'Không có nội dung câu hỏi' ?></h2>
+                                    <p><?= $question['content'] ?? 'Không có nội dung câu hỏi' ?></p>
+                                </div>
+
                             </div>
 
                             <div class="post_actions">
@@ -242,7 +246,7 @@ $is_following = mysqli_num_rows($is_following) > 0;
                                     <?php else: ?>
                                         <?php foreach ($comments as $c): ?>
                                             <div class="comment_item">
-                                               <img src="<?php echo $user['avatar'] ?? '../WebForumTechnology/icon/test.jpg' ?>" alt="Ảnh">
+                                                <img src="<?php echo $user['avatar'] ?? '../WebForumTechnology/icon/test.jpg' ?>" alt="Ảnh">
                                                 <div class="comment_content">
                                                     <div class="comment_user"><?= htmlspecialchars($c['User_name']) ?></div>
                                                     <div class="comment_text"><?= htmlspecialchars($c['Comment']) ?></div>
@@ -253,7 +257,9 @@ $is_following = mysqli_num_rows($is_following) > 0;
                                 </div>
                             </div>
                         </div>
+                                            <br><br><br>
                     <?php endforeach; ?>
+
                 <?php endif; ?>
 
             </div>

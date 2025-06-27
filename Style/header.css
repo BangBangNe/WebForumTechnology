@@ -1,114 +1,122 @@
-
 body {
-    margin: 0;
-    font-family: Arial
+  margin: 0;
+  font-family: Arial;
 }
 
 header {
-    height: 52px;
-    border-bottom: 1px solid rgb(214, 217, 220);
-    color: #000;
+  height: 52px;
+  border-bottom: 1px solid rgb(214, 217, 220);
+  color: #000;
 }
 
 .all {
-    height: 52px;
-    margin: 0 20%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
+  height: 52px;
+  margin: 0 20%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
 }
 
 .trai {
-    display: flex;
-    align-items: center;
-    gap: 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 .trai ol {
-    display: flex;
-    list-style: none;
+  display: flex;
+  list-style: none;
 }
 .giua {
-    flex: 1;
-}   
+  flex: 1;
+}
 .giua input {
-    padding: 6px 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 a {
-    text-decoration: none;
-    color: gray;
-    font-weight: bold;
+  text-decoration: none;
+  color: gray;
+  font-weight: bold;
 }
 
 ol {
-    padding: 0;
-    margin: 0;
-    display: flex;
-    list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  list-style: none;
 }
 
 ol li {
-    margin: 0 5px;
+  margin: 0 5px;
 }
 ol li a {
-    line-height: 24px;
-    display: inline-block;
-    padding: 0px 15px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    border-radius: 12px;
+  line-height: 24px;
+  display: inline-block;
+  padding: 0px 15px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  border-radius: 12px;
 }
-ol li a:hover{
-    background-color: #e4e6e8; /* màu nền hover giống ảnh */
-    color: black;
+ol li a:hover {
+  background-color: #e4e6e8; /* màu nền hover giống ảnh */
+  color: black;
 }
 .phai {
-    display: flex;
+    width: 45%;
+  display: flex;
+}
+
+.user-info {
+  align-content: center;
+  width:max-content;
+  font-style: italic;
+  font-family: cursive;
+  padding-right: 2%;
 }
 
 .phai input {
-    width: 100%;
-    padding: 6px 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 /* login */
-button{
-    width: 100px;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-    margin-left: 5px;
-    border-radius: 8px;
+button {
+  width: 100px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin-left: 5px;
+  border-radius: 8px;
 }
-button:first-of-type{
-    background-color: #fff;
-    color: #2A96D5;
-    border: 2px solid #2A96D5;
+button:first-of-type {
+  background-color: #fff;
+  color: #2a96d5;
+  border: 2px solid #2a96d5;
 }
-button:first-of-type:hover{
-    background-color: #2A96D5;
-    color:#fff;
+button:first-of-type:hover {
+  background-color: #2a96d5;
+  color: #fff;
 }
 
 .login-btn {
-    height: 30px;
+  height: 30px;
 }
 
 .login-btn:hover {
-    background-color: #0056b3;
-    border:1px solid #39e5ff;
-    color: #fff;
+  background-color: #0056b3;
+  border: 1px solid #39e5ff;
+  color: #fff;
 }
-.chuong-thong-bao{
-    background-color: #ffffff;
-    border: 1px solid #ccc;
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    padding: 4px;
-    display: flex;
+.chuong-thong-bao {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  padding: 4px;
+  display: flex;
 }
-.chuong-thong-bao:hover{
-    background-color: #E4E6E8;
+.chuong-thong-bao:hover {
+  background-color: #e4e6e8;
 }

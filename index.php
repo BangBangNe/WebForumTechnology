@@ -13,7 +13,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
 
 
 $page = isset($_GET['page']) ? $_GET['page'] : 'main';
-$allowed_pages = ['main', 'user', 'user_infor', 'tag', 'mainPost', 'tro_chuyen','check','bai_post','cau_hoi']; // an toàn tránh include linh tinh
+$allowed_pages = ['main', 'user', 'user_infor', 'tag', 'mainPost', 'tro_chuyen','check','bai_post','cau_hoi','cap_nhat','feedback']; // an toàn tránh include linh tinh
 
 ?>
 
@@ -65,7 +65,7 @@ $allowed_pages = ['main', 'user', 'user_infor', 'tag', 'mainPost', 'tro_chuyen',
   </script>
 
 
-  <footer><?php include 'Code/footer.php'; ?></footer>
+  <footer id="footer"><?php include 'Code/footer.php'; ?></footer>
 
 </body>
 

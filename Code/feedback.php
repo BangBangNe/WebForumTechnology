@@ -1,15 +1,16 @@
+<?php include 'connect.php' ?>
+<?php 
+if($_SESSION['User_ID'] == null) {
+    header("Location:Code/signinUP.php ");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Feedback - Hỗ trợ</title>
+  <title>Feedback</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 30px;
-      background-color: #f7f7f7;
-    }
-
     .form-group {
       margin-bottom: 20px;
     }
@@ -38,23 +39,6 @@
       background-color: #eee;
     }
 
-    .file-box {
-      border: 2px dashed #ccc;
-      padding: 15px;
-      text-align: center;
-      margin-top: 10px;
-      border-radius: 4px;
-      background-color: white;
-    }
-
-    .file-box input {
-      border: none;
-    }
-
-    .buttons {
-      margin-top: 20px;
-      text-align: center;
-    }
 
     .buttons button {
       padding: 10px 16px;
@@ -85,55 +69,38 @@
       padding-bottom: 10px;
       margin-bottom: 30px;
     }
+    .name{
+      border: 1px solid gray;
+      border-radius: 5px;
+      padding: 7px;
+    }
   </style>
 </head>
 <body>
-
-  <h2>Tạo hỗ trợ</h2>
-
-  <div class="form-group">
-    <label>Email:</label>
-    <input type="text" placeholder="Nhập Email của bạn...">
-  </div>
-
+  <h2>Tạo phản hồi</h2>
+  <form method="post" action="Code/add_feedback.php"> <!-- gửi qua file PHP -->
   <div class="form-group">
     <label>Người dùng:</label>
-    <input type="text" placeholder="Nhập tên của bạn...">
-  </div>
-
-  <div class="form-group">
-    <label>Chủ đề trợ giúp*</label>
-    <select required>
-      <option>— Chọn một chủ đề trợ giúp —</option>
-      <option>tronvuongtamgiacvuongtron</option>
-      <option>tungtungtungtungsarhua</option>
-      <option>Tralalerotralala</option>
-      <option>boombadilococodilo</option>
-      <option>sikibididopdopyesyes</option>
-      <option>Khác...</option>
-    </select>
+    <div class="name">
+      <span class="user-info"><?php echo htmlspecialchars($_SESSION['User_name']); ?></span>
+    </div>
   </div>
 
   <div class="form-group">
     <label>Tiêu đề hỗ trợ *</label>
-    <input type="text" placeholder="Nhập tiêu đề yêu cầu...">
+    <input type="text" name="title" placeholder="Nhập tiêu đề yêu cầu..." required>
   </div>
 
   <div class="form-group">
     <label>Nội dung yêu cầu</label>
-    <textarea placeholder="Vui lòng điền nội dung yêu cầu rõ ràng, chi tiết, tiếng Việt có dấu."></textarea>
-  </div>
-
-  <div class="file-box">
-    <label>Nhập files tại đây hoặc chọn files</label>
-    <input type="file" multiple>
+    <textarea name="content" placeholder="Vui lòng điền nội dung yêu cầu rõ ràng, chi tiết, tiếng Việt có dấu." required></textarea>
   </div>
 
   <div class="buttons">
-    <button class="btn-success">Gửi đi</button>
-    <button class="btn-warning" type="reset">Làm mới</button>
-    <button class="btn-danger">Hủy bỏ</button>
+    <button class="btn-success" type="submit">Gửi đi</button>
+    <button class="btn-warning" type="reset">Làm mới</a></button>
   </div>
+</form>
 
 </body>
 </html>

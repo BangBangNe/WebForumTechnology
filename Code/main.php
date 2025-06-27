@@ -1,4 +1,4 @@
-<?php include 'connect.php';?>
+<?php include 'connect.php'; ?>
 
 
 
@@ -42,62 +42,77 @@
         <div id="filterBox" class="filter-box" style="display: none;">
           <div class="filter-group">
             <h4>Lọc theo</h4>
-            <label><input type="checkbox" name="no_answers" value="1" <?= isset($_GET['no_answers']) ? 'checked' : '' ?>> Không có câu trả lời</label><br>
+            <label><input type="radio" name="answer_filter" value="all" <?= (!isset($_GET['answer_filter']) || $_GET['answer_filter'] == 'all') ? 'checked' : '' ?>> Tất cả</label><br>
+            <label><input type="radio" name="answer_filter" value="has" <?= ($_GET['answer_filter'] ?? '') == 'has' ? 'checked' : '' ?>> Có câu trả lời</label><br>
+            <label><input type="radio" name="answer_filter" value="none" <?= ($_GET['answer_filter'] ?? '') == 'none' ? 'checked' : '' ?>> Không có câu trả lời</label><br>
 
-            <label><input type="checkbox"> Không có câu trả lời được chấp nhận</label><br>
-            <label><input type="checkbox"> Không có Staging Ground </label><br>
-            <label><input type="checkbox"> Có bounty</label><br>
-            <input type="text" placeholder="Days old" style="width: 80px; margin-top: 4px;">
           </div>
 
           <div class="filter-group">
             <h4>Sắp xếp theo</h4>
-            <label><input type="radio" name="sort" checked> Mới nhất</label><br>
-            <label><input type="radio" name="sort"> Hoạt động gần nhất </label><br>
-            <label><input type="radio" name="sort"> Điểm cao nhất </label><br>
-            <label><input type="radio" name="sort"> Thường xuyên nhất</label><br>
-            <label><input type="radio" name="sort"> Bounty sắp kết thúc</label><br>
-            <label><input type="radio" name="sort"> Xu hướng</label><br>
-            <label><input type="radio" name="sort"> Hoạt động nhiều nhất</label>
+            <label><input type="radio" name="sort" value="newest" <?= ($_GET['sort'] ?? '') == 'newest' ? 'checked' : '' ?>> Mới nhất</label><br>
+            <label><input type="radio" name="sort" value="oldest" <?= ($_GET['sort'] ?? '') == 'oldest' ? 'checked' : '' ?>> Cũ nhất</label><br>
+            <label><input type="radio" name="sort" value="likes" <?= ($_GET['sort'] ?? '') == 'likes' ? 'checked' : '' ?>> Thích nhiều nhất</label><br>
           </div>
 
           <div class="filter-group">
-            <h4>Tagged with</h4>
-            <label><input type="radio" name="tagged"> My watched tags</label><br>
-            <label><input type="radio" name="tagged" checked> The following tags:</label><br>
-            <input type="text" name="tag" value="<?= htmlspecialchars($_GET['tag'] ?? '') ?>" placeholder="e.g. javascript or python">
-
+            <h4>Chủ đề</h4>
+            <input type="text" name="tag" value="<?= htmlspecialchars($_GET['tag'] ?? '') ?>" placeholder="e.g. SQL">
           </div>
 
           <div style="margin-top: 16px;">
             <button class="apply-btn">Lọc</button>
-            <button class="cancel-btn">Thoát</button>
           </div>
         </div>
-
       </form>
+
 
       <!-- Danh sách câu hỏi -->
       <?php
       $where = [];
 
-      if (isset($_GET['no_answers']) && $_GET['no_answers'] == '1') {
-        $where[] = "q.ID_Ques NOT IN (SELECT ID_Ques FROM answers)";
+      $where = [];
+      $orderBy = "q.ID_Ques DESC"; // mặc định: mới nhất
+
+      // Lọc: không có câu trả lời (giả sử comments là bảng chứa trả lời)
+      if (isset($_GET['answer_filter']) && $_GET['answer_filter'] === 'has') {
+        $where[] = "q.ID_Ques IN (SELECT DISTINCT ID_Ques FROM comments)";
+      } elseif (isset($_GET['answer_filter']) && $_GET['answer_filter'] === 'none') {
+        $where[] = "q.ID_Ques NOT IN (SELECT DISTINCT ID_Ques FROM comments)";
       }
 
+
+
+
+
+      // Lọc theo tag
       if (!empty($_GET['tag'])) {
         $tag = $conn->real_escape_string($_GET['tag']);
         $where[] = "t.Name LIKE '%$tag%'";
       }
 
+      // Sắp xếp theo lựa chọn
+      if (isset($_GET['sort'])) {
+        switch ($_GET['sort']) {
+          case 'oldest':
+            $orderBy = "q.ID_Ques ASC";
+            break;
+          case 'likes':
+            $orderBy = "q.like_count DESC"; // giả sử có cột like_count
+            break;
+          default:
+            $orderBy = "q.ID_Ques DESC";
+        }
+      }
+
       $whereSql = count($where) ? "WHERE " . implode(" AND ", $where) : "";
 
-      $sql = "SELECT q.ID_Ques, q.Mo_ta, q.Hinh_anh, t.Name AS tag_name, u.User_name
-            FROM questions q
-            JOIN tags t ON q.ID_Tags = t.ID_tag
-            JOIN users u ON q.ID_user = u.User_ID
-            $whereSql
-            ORDER BY q.ID_Ques DESC";
+      $sql = "SELECT q.ID_Ques, q.Mo_ta, q.Hinh_anh, q.like_count, q.Date_tao, t.Name AS tag_name, u.User_name
+        FROM questions q
+        JOIN tags t ON q.ID_Tags = t.ID_tag
+        JOIN users u ON q.ID_user = u.User_ID
+        $whereSql
+        ORDER BY $orderBy";
 
 
       $result = $conn->query($sql);
@@ -106,7 +121,7 @@
           echo '<div class="question-item">';
 
           echo '<a class="question-title" href="Code/Ques.php?id=' . htmlspecialchars($row['ID_Ques']) . '">' . htmlspecialchars($row['Mo_ta']) . '</a>';
-          echo '<div class="meta">0 votes | 0 answers | 2 views</div>';
+          echo '<div class="meta">'.htmlspecialchars($row['like_count']).' like | '.htmlspecialchars($row['Date_tao']).'</div>';
           echo '<div class="tags">';
           echo '<span class="tag">' . htmlspecialchars($row['tag_name']) . '</span>';
           echo '<br>';

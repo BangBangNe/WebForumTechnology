@@ -6,9 +6,10 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     exit;
 }
 
+
 $id = intval($_GET['id']);
 
-$sql = "SELECT q.ID_Ques, q.Mo_ta, q.Hinh_anh, t.Name AS tag_name, u.User_name
+$sql = "SELECT q.ID_Ques, q.Mo_ta, q.Hinh_anh, q.content ,t.Name AS tag_name, u.User_name
         FROM questions q
         JOIN tags t ON q.ID_Tags = t.ID_tag
         JOIN users u ON q.ID_user = u.User_ID
@@ -28,7 +29,7 @@ $link = "SELECT c.Comment, u.User_name, u.avatar
 
 $comments = mysqli_query($conn, $link);
 
-$user_id = $_SESSION['User_ID'] ; 
+$user_id = $_SESSION['User_ID'] ?? '-1';
 $user_result = mysqli_query($conn, "SELECT * FROM users WHERE User_ID = $user_id");
 $user = mysqli_fetch_assoc($user_result);
 ?>
@@ -45,6 +46,10 @@ $user = mysqli_fetch_assoc($user_result);
             font-family: Arial, sans-serif;
             background-color: #f6f6f6;
             margin: 0;
+        }
+
+        .post-container {
+            padding: 5%;
         }
 
         h1 {
@@ -92,18 +97,20 @@ $user = mysqli_fetch_assoc($user_result);
             <?php
             if ($result->num_rows > 0) {
                 echo '<h1>' . htmlspecialchars($ques['Mo_ta']) . '</h1>';
-                echo '<div class="meta">Người đăng: <strong>' . htmlspecialchars($ques['User_name']) . '</strong></div>';
-
+                echo '<div class="meta"><h3>' . htmlspecialchars($ques['content']) . '</h3></div>';
                 if (!empty($ques['Hinh_anh'])) {
                     echo '<img class="image" src="' . htmlspecialchars($ques['Hinh_anh']) . '" alt="Hình ảnh bài viết">';
                 }
+                echo '<div class="meta">Người đăng: <strong>' . htmlspecialchars($ques['User_name']) . '</strong></div>';
+
+
 
                 echo '<div class="tag">#' . htmlspecialchars($ques['tag_name']) . '</div>';
             } else {
                 echo "<h2>Không tìm thấy bài viết.</h2>";
             }
             ?>
-                            </br></br></br></br></br>
+            </br></br></br></br></br>
             <div class="comment_section">
                 <div class="comment_input">
                     <img src="<?= $user['avatar'] ?? 'test.jpg' ?>" alt="" class="comment_avata">
@@ -127,14 +134,13 @@ $user = mysqli_fetch_assoc($user_result);
                 </div>
             </div>
 
-            <a class="back-link" href="index.php">← Quay về danh sách</a>
         </div>
     </div>
     <script>
         document.querySelector('.send_comment_btn').addEventListener('click', function() {
             const textarea = document.querySelector('.comment_input_box');
             const comment = textarea.value.trim();
-            const quesId = textarea.dataset.quesId; 
+            const quesId = textarea.dataset.quesId;
 
             if (!comment) return;
 

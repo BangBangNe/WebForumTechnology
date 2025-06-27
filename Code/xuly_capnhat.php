@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
         $_SESSION['update_error'] = "Lỗi khi cập nhật thông tin.";
     }
 
-    header("Location: ../index.php");
+    header("Location: ../index.php?page=user_infor");
     exit();
 } else {
     die("Truy cập không hợp lệ.");

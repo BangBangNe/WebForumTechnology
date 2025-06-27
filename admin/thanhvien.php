@@ -1,3 +1,14 @@
+<?php
+// Kết nối CSDL
+$conn = mysqli_connect("localhost", "root", "", "datadiendan");
+if (!$conn) {
+    die("Kết nối thất bại: " . mysqli_connect_error());
+}
+
+$sql = "SELECT User_ID, user_name, location, avatar FROM users";
+$result = mysqli_query($conn, $sql);
+?>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -20,6 +31,10 @@
       background-color: #f5f5f5;
     }
 
+    th.ID{
+      width: 5%;
+    }
+
     tr:hover {
       background-color: #f0f8ff;
     }
@@ -32,11 +47,25 @@
       text-decoration: none;
       padding: 4px 8px;
       margin: 0 2px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .sua {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .xoa {
+      background-color: #f44336;
+      color: white;
     }
 
     h1 {
       margin-bottom: 20px;
+      text-align: center;
     }
+
     .avatar {
       width: 50px;
       height: 50px;
@@ -45,60 +74,40 @@
       border: 1px solid #ddd;
     }
   </style>
-
 </head>
 <body>
-  <h1>Thành viên</h1>
+  <h1>Quản lý thành viên</h1>
   <table>
     <thead>
       <tr>
-        <th>Avata</th>
+        <th class = "ID">ID thành viên</th> 
+        <th>Avatar</th>
         <th>Tên thành viên</th>
-        <th>Ngày sinh</th>
-        <th>Trạng thái</th>
-        <th>Trang cá nhân</th>
+        <th>Địa điểm</th>
+        <th>Tuỳ chỉnh</th>
       </tr>
     </thead>
     <tbody>
-      <?php
-      $baiviet = [
-        ['Mika.png', '03/08/17', 'Nguyễn Thị Ngọc Trầm'],
-        ['Hikari.png', '03/08/17', 'Đoàn Công Nguyên'],
-        ['Ibuki.png',  '03/08/17', 'Phạm Hoàng Long'],
-        ['Iroha.png',  '03/08/17', 'Trần Trí Quý'],
-        ['Rio.png',    '03/08/17', 'Trần Băng Băng'],
-        ['Seia.png',   '03/08/17', 'Công Ngọc Hoàng'],
-        ['Wakamo.png',  '03/08/17', 'Ẩn danh'],
-        ['Nozomi.png','03/08/17', 'Ẩn Danh'],
-      ];
-
-      foreach ($baiviet as $bv) {
-        echo "<tr>
-                <td><img src='Anh/{$bv[0]}' alt='avatar' class='avatar'></td>
-                <td>{$bv[2]}</td>
-                <td>{$bv[1]}</td>
-                <td>
-                  <select>
-                    <option>...</option>
-                    <option>cấm chat</option>
-                    <option>cấm đăng bài</option>
-                    <option>cấm cả hai</option>
-                  </select>
-                  <select>
-                    <option>...</option>
-                    <option>24 giờ</option>
-                    <option>1 tuần</option>
-                    <option>30 ngày</option>
-                    <option>vĩnh viễn</option>
-                  </select>
-                </td>
-                <td>
-                  <a href='#' class='btn'>Xem</a>
-                </td>
-              </tr>";
-      }
-      ?>
+      <?php if (mysqli_num_rows($result) > 0): ?>
+        <?php while ($row = mysqli_fetch_assoc($result)): ?>
+          <tr>
+            <td><?= $row['User_ID'] ?></td> 
+            <td>
+              <img src="Anh/<?= $row['avatar'] ? $row['avatar'] : 'default.png' ?>" alt="avatar" class="avatar">
+            </td>
+            <td><?= htmlspecialchars($row['user_name']) ?></td>
+            <td><?= htmlspecialchars($row['location']) ?></td>
+            <td>
+              <a href="delete_user.php?id=<?= $row['User_ID'] ?>" class="btn xoa" onclick="return confirm('Bạn có chắc muốn xóa thành viên này không?')">Xóa tài khoản</a>
+            </td>
+          </tr>
+        <?php endwhile; ?>
+      <?php else: ?>
+        <tr><td colspan="6">Không có thành viên nào.</td></tr>
+      <?php endif; ?>
     </tbody>
   </table>
 </body>
 </html>
+
+<?php mysqli_close($conn); ?>

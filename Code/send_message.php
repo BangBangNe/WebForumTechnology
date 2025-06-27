@@ -56,7 +56,7 @@ $check_follow->close();
 if ($follow_count < 1) {
     http_response_code(403); // Forbidden
     exit(json_encode([
-        'error' => 'Hiện tại 1 trong 2 đã không theo dỗi nhau. Nên không thể trò chuyện được'
+        'error' => 'Bạn cần THEO DÕI người dùng này để nhắn tin.'
     ]));
 }
 

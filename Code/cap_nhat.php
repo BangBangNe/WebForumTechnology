@@ -1,5 +1,4 @@
 <?php
-session_start();
 include 'db_connect.php'; // tạo biến $conn (PDO)
 
 $user_id = $_SESSION['User_ID'] ;
@@ -20,7 +19,7 @@ if (!$user) {
 <link rel="stylesheet" href="../Style/user_infor.css">
 
 <div class="container_infor">
-    <form id="updateForm" action="../Code/xuly_capnhat.php" method="POST" enctype="multipart/form-data">
+    <form id="updateForm" action="Code/xuly_capnhat.php" method="POST" enctype="multipart/form-data">
         <div class="container_up">
             <div class="container_avata">
                 <img src="<?= htmlspecialchars($user['avatar'] ?? '../WebForumTechnology/icon/test.jpg') ?>" alt="Ảnh" style="width:100px; height:100px; border-radius: 50%;">

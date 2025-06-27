@@ -29,7 +29,7 @@ $link = "SELECT c.content, u.User_name, u.avatar
 
 $comments = mysqli_query($conn, $link);
 
-$user_id = $_SESSION['User_ID'] ; 
+$user_id = $_SESSION['User_ID'] ?? '-1'; 
 $user_result = mysqli_query($conn, "SELECT * FROM users WHERE User_ID = $user_id");
 $user = mysqli_fetch_assoc($user_result);
 
