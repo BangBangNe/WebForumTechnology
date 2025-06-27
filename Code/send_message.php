@@ -15,6 +15,7 @@ if (!isset($_POST['sender_id'], $_POST['receiver_id'], $_POST['message'])) {
 $sender_id = (int)$_POST['sender_id'];
 $receiver_id = (int)$_POST['receiver_id'];
 $message = trim($_POST['message']);
+// echo "Sender ID: $sender_id, Receiver ID: $receiver_id, Message: $message\n";
 
 if ($sender_id <= 0 || $receiver_id <= 0) {
     http_response_code(400);
@@ -37,6 +38,26 @@ $res = $check->get_result();
 if ($res->num_rows < 2) {
     http_response_code(400);
     exit(json_encode(['error' => 'Một trong hai người dùng không tồn tại']));
+}
+
+// Thêm đoạn này: Kiểm tra có follow ít nhất một chiều không
+$check_follow = $link->prepare("
+    SELECT COUNT(*) 
+    FROM followers 
+    WHERE (follower_id = ? AND followed_id = ?) 
+       OR (follower_id = ? AND followed_id = ?)
+");
+$check_follow->bind_param("iiii", $sender_id, $receiver_id, $receiver_id, $sender_id);
+$check_follow->execute();
+$check_follow->bind_result($follow_count);
+$check_follow->fetch();
+$check_follow->close();
+
+if ($follow_count < 1) {
+    http_response_code(403); // Forbidden
+    exit(json_encode([
+        'error' => 'Hiện tại 1 trong 2 đã không theo dỗi nhau. Nên không thể trò chuyện được'
+    ]));
 }
 
 // Kiểm tra conversation đã tồn tại chưa

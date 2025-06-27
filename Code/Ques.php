@@ -28,8 +28,7 @@ $link = "SELECT c.Comment, u.User_name, u.avatar
 
 $comments = mysqli_query($conn, $link);
 
-$user_id = $_SESSION['User_ID'] ?? '0'; 
-
+$user_id = $_SESSION['User_ID'] ; 
 $user_result = mysqli_query($conn, "SELECT * FROM users WHERE User_ID = $user_id");
 $user = mysqli_fetch_assoc($user_result);
 ?>
@@ -117,7 +116,7 @@ $user = mysqli_fetch_assoc($user_result);
                     <?php else: ?>
                         <?php foreach ($comments as $c): ?>
                             <div class="comment_item">
-                                <img src="<?php echo $user['avatar'] ?? '../WebForumTechnology/icon/test.jpg' ?>" alt="Ảnh" class="comment_avata">
+                                <img src="<?php echo htmlspecialchars($c['avatar'] ?? '../WebForumTechnology/icon/test.jpg'); ?>" alt="Ảnh" class="comment_avata">
                                 <div class="comment_content">
                                     <div class="comment_user"><?= htmlspecialchars($c['User_name']) ?></div>
                                     <div class="comment_text"><?= htmlspecialchars($c['Comment']) ?></div>
@@ -127,6 +126,8 @@ $user = mysqli_fetch_assoc($user_result);
                     <?php endif; ?>
                 </div>
             </div>
+
+            <a class="back-link" href="index.php">← Quay về danh sách</a>
         </div>
     </div>
     <script>

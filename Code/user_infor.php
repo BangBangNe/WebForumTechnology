@@ -6,11 +6,10 @@ $you_id=$_GET['user_id'] ?? null; // ID người bạn muốn nhắn tin, nếu 
 $user_id=$_SESSION['User_ID']?? $you_id; // Người đang đăng nhập
 
 
-
 if($you_id == null ) {
     $you_id=$user_id; // Nếu không có ID người bạn muốn nhắn tin, thì lấy ID của người đang đăng nhập
 }
-$user_result = mysqli_query($link, "SELECT * FROM users WHERE User_ID = $user_id");
+$user_result = mysqli_query($link, "SELECT * FROM users WHERE User_ID = $you_id");
 $user = mysqli_fetch_assoc($user_result);
 
 // Lấy toàn bộ đoạn chat giữa $user_id và $you_id
@@ -48,7 +47,7 @@ while ($row = mysqli_fetch_assoc($question_result)) {
 $follower_count = mysqli_query($link, "SELECT COUNT(*) as count FROM followers WHERE followed_id = $you_id");
 $follower_count = mysqli_fetch_assoc($follower_count)['count'];
 
-// Kiểm tra xem người dùng đã theo dõi chưa
+// Kiểm tra xem người dùng đã theo dõi chưaus
 $is_following = mysqli_query($link, "SELECT * FROM followers WHERE follower_id = $user_id AND followed_id = $you_id");
 $is_following = mysqli_num_rows($is_following) > 0;
 
@@ -73,10 +72,10 @@ $is_following = mysqli_num_rows($is_following) > 0;
 
                     <div class="container_avata">
                         <img src="<?php echo $user['avatar'] ?? '../WebForumTechnology/icon/test.jpg' ?>" alt="Ảnh">
-                        <?php if ($you_id == $user_id): ?>
-                            <form id="avatarForm" action="Code/xuly_anh.php" method="POST" enctype="multipart/form-data" style="margin-top: 10px;">
-                                <input type="file" name="avatar" id="avatarInput" accept="image/*" style="display: none;" onchange="document.getElementById('avatarForm').submit();">
-                                <button type="button" onclick="document.getElementById('avatarInput').click();">Đổi ảnh đại diện</button>
+                        <?php if ($you_id == $user_id && isset($_SESSION['User_ID'])): ?>
+                            <form action="Code/cap_nhat.php" method="POST" style="margin-top: 10px;">
+                                <input type="hidden" name="user_id" value="<?= $user_id ?>">
+                                <button type="submit">Cập nhật thông tin cá nhân</button>
                             </form>
                         <?php endif; ?>
                         <!-- Theo doi -->
@@ -89,7 +88,7 @@ $is_following = mysqli_num_rows($is_following) > 0;
                         <?php endif;?>
 
                         <!-- Chat -->
-                        <?php if ($you_id != $user_id): ?>>
+                        <?php if ($you_id != $user_id): ?>
                             <div class="container_chat">Nhắn tin</div>
                         <?php endif; ?>
                     </div>
