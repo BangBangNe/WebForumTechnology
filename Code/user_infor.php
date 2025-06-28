@@ -1,16 +1,21 @@
 <?php
 include 'db_connect.php';
 
+$type = isset($_GET['type']) ? $_GET['type'] : 'UI_ques';
+$allowed_types = ['UI_ques', 'UI_post']; // an toàn tránh include linh tinh
 
-$you_id = $_GET['user_id'] ?? null; // ID người bạn muốn nhắn tin, nếu không có thì sẽ lấy ID của người đang đăng nhập
+
+$you_id = $_GET['user_id'] ?? $_SESSION['User_ID']; // ID người bạn muốn nhắn tin, nếu không có thì sẽ lấy ID của người đang đăng nhập
 $user_id = $_SESSION['User_ID'] ?? $you_id; // Người đang đăng nhập
 
 
-if ($you_id == null) {
-    $you_id = $user_id; // Nếu không có ID người bạn muốn nhắn tin, thì lấy ID của người đang đăng nhập
-}
 $user_result = mysqli_query($link, "SELECT * FROM users WHERE User_ID = $you_id");
+
+
 $user = mysqli_fetch_assoc($user_result);
+
+$user2_result = mysqli_query($link, "SELECT * FROM users WHERE User_ID = $user_id");
+$user2 = mysqli_fetch_assoc($user2_result);
 
 // Lấy toàn bộ đoạn chat giữa $user_id và $you_id
 $conv_result = mysqli_query($link, "
@@ -39,6 +44,10 @@ if ($conversation) {
 // Lấy câu hỏi và bài viết mới nhất của user
 $question_result = mysqli_query($link, "SELECT * FROM questions WHERE ID_user = $you_id ORDER BY Date_tao DESC");
 $questions = [];
+
+$posts_result = mysqli_query($link, "SELECT * FROM posts WHERE user_id = $you_id ORDER BY created_at DESC");
+$posts = [];
+
 while ($row = mysqli_fetch_assoc($question_result)) {
     $questions[] = $row;
 }
@@ -72,12 +81,14 @@ $is_following = mysqli_num_rows($is_following) > 0;
 
                     <div class="container_avata">
                         <img src="<?php echo $user['avatar'] ?? '../WebForumTechnology/icon/test.jpg' ?>" alt="Ảnh">
+
                         <?php if ($you_id == $user_id && isset($_SESSION['User_ID'])): ?>
-                            <form action="index.php?page=cap_nhat" method="POST" style="margin-top: 10px;">
+                            <form action="index.php?page=cap_nhat" method="POST" style="margin-top: 10px; margin-right: 10px;">
                                 <input type="hidden" name="user_id" value="<?= $user_id ?>">
-                                <button type="submit">Cập nhật thông tin cá nhân</button>
+                                <button class="update" type="submit">Cập nhật thông tin cá nhân</button>
                             </form>
                         <?php endif; ?>
+
                         <!-- Theo doi -->
                         <div class="count" style="text-align: left;">
                             <div class="num" id="followerCount"><?= $follower_count ?? 0 ?></div>
@@ -94,10 +105,9 @@ $is_following = mysqli_num_rows($is_following) > 0;
                     </div>
                     <div class="chat_box">
                         <div class="chat_box_header">
-                            <!-- <img src="(?= $user['avatar'] ?? 'test.jpg' ?>" alt="" class="chat_avata"> -->
-                            <img src="../uploads/icon/avatar_md.jpg" alt="" class="chat_avata">
+                            <img src="<?= $user['avatar'] ?? 'test.jpg' ?>" alt="" class="chat_avata">
                             <div class="chat_infor">
-                                <h3><?= $user['User_name'] ?></h3>  
+                                <h3><?= $user['User_name'] ?></h3>
                             </div>
                             <div class="chat_actions">
                                 <button class="chat_mini">-</button>
@@ -137,187 +147,58 @@ $is_following = mysqli_num_rows($is_following) > 0;
                                 <p><i><?= $user['bio'] ?? '' ?></i></p>
                             </div>
                         </div>
-                        <div class="container_stats">
-                            <p>Đã tham gia từ: <?= $user['created_at'] ?? 'Chưa xác định' ?></p>
-                            <p>Tổng số bài viết: </p>
-                            <p>Tổng số câu hỏi: <?= count($questions) ?? 'Chưa xác định' ?></p>
+                        <div class="infor2">
+                            <div class="field">
+                                <p>Đã tham gia từ:</p>
+                                <p>Tổng số bài viết:</p>
+                                <p>Tổng số câu hỏi:</p>
+                            </div>
+                            <div class="data">
+                                <p><i><?= $user['created_at'] ?? 'Chưa xác định' ?></i></p>
+                                <p><i><?= $posts_result->num_rows ?? 'Chưa xác định' ?></i></p>
+                                <p><i><?= count($questions) ?? 'Chưa xác định' ?></i></p>
+                            </div>
                         </div>
                     </div>
 
-                </div>
+                </div><br><br>
 
                 <div class="container_about"> <?= $user['About'] ?? 'Chưa xác định' ?> </div>
+                <div class="sidebar" style="display: flex; background-color: transparent; gap: 15px;">
+                    <?php $temp = $_GET['user_id']??$_SESSION['User_ID'];
+
+                    if ($type === 'UI_ques') { ?>
+                        <a style="background-color:gray; color:aliceblue;" class="btn-UI" href="index.php?page=user_infor&user_id=<?php echo $temp; ?>&type=UI_ques">Câu hỏi</a> <br>
+                        <a class="btn-UI" href="index.php?page=user_infor&user_id=<?php echo $temp; ?>&type=UI_post">Bài viết</a><br>
+                    <?php
+                    } else { ?>
+                        <a class="btn-UI" href="index.php?page=user_infor&user_id=<?php echo $temp; ?>&type=UI_ques">Câu hỏi</a> <br>
+                        <a style="background-color:gray; color:aliceblue;" class="btn-UI" href="index.php?page=user_infor&user_id=<?php echo $temp; ?>&type=UI_post">Bài viết</a><br>
+                    <?php };
+                    ?>
+
+
+                </div>
             </div>
 
             <div class="layout">
                 <!-- Bài viết -->
-                <?php if (!empty($questions)): ?>
-                    <?php foreach ($questions as $question): ?>
-                        <?php
-                        // Lấy comment riêng cho mỗi bài
-                        $q_id = $question['ID_Ques'];
-                        $cmt_result = mysqli_query($link, "
-                                SELECT c.Comment, u.User_name, u.avatar
-                                FROM comments c
-                                JOIN users u ON c.ID_User = u.User_ID
-                                WHERE c.ID_Ques = $q_id
-                            ");
-                        //Lấy số lượng like
-                        $like_result = mysqli_query($link, "SELECT like_count FROM questions WHERE ID_Ques = $q_id");
-                        $like_data = mysqli_fetch_assoc($like_result);
-                        $like_count = $like_data['like_count'] ?? 0;
-                        // Kiểm tra người dùng đã like bài viết chưa
-                        $hasLiked = false;
-                        if (isset($user['User_ID'])) {
-                            $userId = $user['User_ID'];
-                            $likeCheckQuery = mysqli_query($link, "
-                                    SELECT 1 FROM question_likes 
-                                    WHERE user_id = $userId AND question_id = $q_id
-                                    LIMIT 1
-                                ");
-
-                            if (!$likeCheckQuery) {
-                                // Ghi log lỗi hoặc hiển thị ra để debug
-                                echo "<p style='color:red;'>Lỗi truy vấn LIKE: " . mysqli_error($link) . "</p>";
-                            } else {
-                                $hasLiked = mysqli_num_rows($likeCheckQuery) > 0;
-                            }
-                        }
-                        $comments = [];
-                        while ($row = mysqli_fetch_assoc($cmt_result)) {
-                            $comments[] = $row;
-                        }
-                        ?>
-                        <div class="container_post">
-                            <div class="post_header">
-                                <img src="<?php echo $user['avatar'] ?? '../WebForumTechnology/icon/test.jpg' ?>" alt="Ảnh">
-                                <div class="post_user_infor">
-                                    <h3><?= $user['User_name'] ?></h3>
-                                    <p><?= $question['Date_tao'] ?? 'Không rõ ngày' ?> . <i class="fas fa-globe-asia"></i></p>
-                                </div>
-                            </div>
-
-                            <div class="post_content">
-                                <div class="post_text">
-                                    <h2><?= $question['Mo_ta'] ?? 'Không có nội dung câu hỏi' ?></h2>
-                                    <p><?= $question['content'] ?? 'Không có nội dung câu hỏi' ?></p>
-                                </div>
-
-                            </div>
-
-                            <div class="post_actions">
-                                <div class="frame">
-                                    <div style="display: flex; gap: 2%; width: 50%; color: #555;">
-                                        <div class="likes_count"> <?= $like_count ?> </div>
-                                        <div style="align-content: center;"> lượt thích</div>
-                                    </div>
-
-                                    <div class="action_btn like_btn <?= $hasLiked ? 'active' : '' ?>"
-                                        onclick="toggleLike(this, <?= $question['ID_Ques'] ?>)">
-                                        <i class="<?= $hasLiked ? 'fas' : 'far' ?> fa-thumbs-up"></i>
-                                        <span><?= $hasLiked ? 'Đã thích' : 'Thích' ?></span>
-                                    </div>
-                                </div>
-
-
-                                <div class="frame">
-                                    <div style="display: flex; gap: 2%; width: 50%; color: #555;">
-                                        <div class="comments_count"><?= isset($comments) ? count($comments) : 0 ?> </div>
-                                        <div style="align-content: center;"> lượt bình luận</div>
-                                    </div>
-
-                                    <div class="action_btn comment-btn" onclick="focusComment()">
-                                        <i class="far fa-comment"></i>
-                                        <span>Bình luận</span>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="comment_section">
-                                <div class="comment_input">
-                                    <img src="<?php echo $user['avatar'] ?? '../WebForumTechnology/icon/test.jpg' ?>" alt="Ảnh">
-                                    <textarea name="comment" class="comment_input_box" data-ques-id="<?= $question['ID_Ques'] ?>" placeholder="Viết bình luận ....."></textarea>
-                                </div>
-
-                                <div class="comment_list">
-                                    <?php if (empty($comments)): ?>
-                                        <p>Chưa có bình luận nào.</p>
-                                    <?php else: ?>
-                                        <?php foreach ($comments as $c): ?>
-                                            <div class="comment_item">
-                                                <img src="<?php echo $user['avatar'] ?? '../WebForumTechnology/icon/test.jpg' ?>" alt="Ảnh">
-                                                <div class="comment_content">
-                                                    <div class="comment_user"><?= htmlspecialchars($c['User_name']) ?></div>
-                                                    <div class="comment_text"><?= htmlspecialchars($c['Comment']) ?></div>
-                                                </div>
-                                            </div>
-                                        <?php endforeach; ?>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
-                        </div>
-                                            <br><br><br>
-                    <?php endforeach; ?>
-
-                <?php endif; ?>
+                <div id="main-content" class="container">
+                    <?php
+                    if (in_array($type, $allowed_types)) {
+                        include "Code/{$type}.php";
+                    } else {
+                        echo "<p>Không tìm thấy nội dung.</p>";
+                    }
+                    ?></div>
 
             </div>
 
             <div class="end"><br></div>
         </div>
-
-        <script src="Javascript/user_infor.js"></script>
     </div>
 
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-    <script>
-        // Chờ DOM tải xong
-        document.addEventListener('DOMContentLoaded', function() {
-            // Lấy nút follow
-            const followBtn = document.getElementById('followBtn');
 
-            // Thêm sự kiện click
-            followBtn.addEventListener('click', function() {
-                // Lấy ID từ PHP (cần thêm vào HTML)
-                const userId = <?= $user_id ?? 0 ?>;
-                const followedId = <?= $you_id ?? 0 ?>;
-                console.log('User ID:', userId, 'Followed ID:', followedId);
-
-                // Hiển thị trạng thái loading
-                followBtn.disabled = true;
-                const originalText = followBtn.textContent;
-                followBtn.textContent = '...';
-
-                // Gửi request đến server
-                fetch('Code/follow_action.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: `user_id=${userId}&followed_id=${followedId}`
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Cập nhật text nút
-                            followBtn.textContent = data.is_following ? 'Đang theo dõi' : 'Theo dõi';
-
-                            // Cập nhật số lượng
-                            document.getElementById('followerCount').textContent = data.follower_count;
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Lỗi:', error);
-                        alert('Có lỗi xảy ra');
-                    })
-                    .finally(() => {
-                        followBtn.disabled = false;
-                    });
-            });
-        });
-    </script>
 </body>
 
 </html>

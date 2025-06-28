@@ -76,7 +76,14 @@
         flex-direction: column;
         background-color: #f5f7fb;
     }
+.message_text{
+    padding: 10px;
+        border-radius: 10px;
+}
 
+.chat_message received{
+
+}
     .chat-header {
         padding: 18px 25px;
         border-bottom: 1px solid var(--border-color);

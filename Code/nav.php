@@ -1,12 +1,22 @@
+<?php
+include 'connect.php'; // Kết nối đến cơ sở dữ liệu
+$sql = "SELECT User_name, avatar, follow, User_ID FROM users ORDER BY follow DESC LIMIT 5";
+$result = $conn->query($sql);
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sidebar Navigation</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="../Style/nav.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sidebar Navigation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../Style/nav.css">
 </head>
+
 <body>
     <div class="sidebar">
         <div class="sb1">
@@ -21,4 +31,5 @@
         </div>
     </div>
 </body>
+
 </html>

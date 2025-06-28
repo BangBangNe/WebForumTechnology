@@ -22,18 +22,10 @@
         <div class="user-actions">
           <button class="ask-btn" onclick="location.href='index.php?page=cau_hoi'">Đặt câu hỏi</button>
           <button id="toggleFilterBtn" class="filter-toggle-btn">Lọc</button>
-          <div class="user-avatar" title="User profile"></div>
         </div>
       </div>
       <div style="color: gray; text-align:justify;">
         <i>Nơi người dùng có thể đăng các câu hỏi để được giải đáp các thắc mắc về chủ đề liên quan đến công nghệ.</i>
-        <!-- Đếm số lượng bài viết -->
-        <?php
-        $count = "SELECT q.ID_Ques
-        FROM questions q";
-        $count_ques = $conn->query($count);
-        echo '<p>Hiện tại đang có ' . $count_ques->num_rows . ' câu hỏi.</p>';
-        ?>
       </div>
       <br>
 

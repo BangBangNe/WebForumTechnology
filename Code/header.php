@@ -1,3 +1,14 @@
+<?php
+include 'db_connect.php';
+
+if (isset($_SESSION['User_ID'])) {
+  $user_id = $_SESSION['User_ID'];
+  $user2_result = mysqli_query($link, "SELECT * FROM users WHERE User_ID = $user_id");
+  $user2 = mysqli_fetch_assoc($user2_result);
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -31,7 +42,7 @@
           echo '<button class="login-btn" onclick="window.location.href=\'Code/signinUP.php\';">Đăng Nhập</button>';
         }
         ?>
-        <button class="chuong-thong-bao"><img src="../uploads/icon/bell.png" alt=""></button>
+        <div class="chuong-thong-bao"><img src="<?php echo $user2['avatar'] ?? '../WebForumTechnology/uploads/icon/avatar_md.jpg'  ?>" alt="anh"></div>
 
       </div>
     </div>

@@ -11,36 +11,27 @@
   <footer>
     <div class="footer-container">
       <div class="footer-column">
-        <h3>StackOverflow</h3>
-        <a href="#">Questions</a>
-        <a href="#">Help</a>
-        <a href="#">Chat</a>
+        <h3>ForumTechnology</h3>
+        <a>Chuyên đề thực tế 2</a>
+        <a>Nhóm 5</a>
       </div>
       <div class="footer-column">
-        <h3>Product</h3>
-        <a href="#">Teams</a>
-        <a href="#">Advertising</a>
-        <a href="#">Talent</a>
+        <h3>Thành viên</h3>
+        <a>Trần Băng Băng (nhóm trưởng)</a>
+        <a>Trần Thị Ngọc Trầm</a>
+        <a>Phạm Hoàng Long</a>
+        <a>Đoàn Công Nguyên</a>
+        <a>Nguyễn Trí Quý</a>
       </div>
       <div class="footer-column">
-        <h3>Company</h3>
-        <a href="#">About</a>
-        <a href="#">Press</a>
-        <a href="#">Work Here</a>
-        <a href="#">Legal</a>
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Service</a>
-        <a href="#">Contact Us</a>
-        <a href="#">Cookie Settings</a>
+        <h3>Công cụ AI tạo sinh </h3>
+        <a>ChatGPT</a>
       </div>
       <div class="footer-column">
-        <h3>Stack Exchange Network</h3>
-        <a href="#">Technology</a>
-        <a href="#">Culture & Recreation</a>
-        <a href="#">Life & Arts</a>
-        <a href="#">Science</a>
-        <a href="#">Professional</a>
-        <a href="#">Business</a>
+        <h3>Chủ đề</h3>
+        <a>Sử dụng ChatGPT</a>
+        <a>hỗ trợ xây dựng</a>
+        <a>Website diễn đàn công nghệ</a>
       </div>
     </div>
   </footer>

@@ -3,7 +3,7 @@ session_start();
 require 'db_connect.php';
 
 if (!$_SESSION['User_ID']) {
-    header('location:signInUP.php');
+    echo "<script>window.location.href = 'signInUP.php';</script>";
     exit('Bạn chưa đăng nhập');
 }
 

@@ -6,6 +6,10 @@ $follower_id = $_GET['followed_by'] ?? null;
 $search = $_GET['search'] ?? null;
 $current_id = $_SESSION['User_ID'] ?? null;
 
+$is_filtered = isset($_GET['followed_by']) && $_GET['followed_by'] == $current_id;
+$current_page = "index.php?page=user";
+$link = $is_filtered ? $current_page : $current_page . "&followed_by=" . $current_id;
+
 // Truy vấn
 if ($follower_id) {
     $follower_id = intval($follower_id);
@@ -58,7 +62,7 @@ $result = $conn->query($sql);
         <div class="users">
             <h1>Người dùng</h1>
 
-            <!-- Tìm kiếm và sắp xếp -->
+            <!-- Tìm kiếm-->
             <div class="tim-xep">
                 <div class="fas fa-search">
                     <form method="GET" action="index.php">
@@ -69,25 +73,18 @@ $result = $conn->query($sql);
                         <input type="text" id="searchInput" name="search" placeholder="Tìm kiếm..." value="<?= htmlspecialchars($search ?? '') ?>" />
                     </form>
                 </div>
+                <!-- Sắp xếp -->
                 <div class="sap-xep">
-                    <b>Tìm kiếm theo TOP |</b>
-                    <span><a href="#">Kinh Nghiệm</a></span>
-                    <span><a href="#">Rate</a></span>
-                    <span><a href="#">Theo dõi</a></span>
-                </div>
-            </div>
-
-            <!-- Sắp xếp -->
-            <div class="time">
-                <div class="sub-time">
                     <?php if ($current_id != null) { ?>
-                        <a href="index.php?page=user&followed_by=<?= $current_id ?>"><span>Người đang theo dõi bạn</span></a>
+                        <a href="<?= $link ?>"><span>Người đang theo dõi bạn</span></a>
                     <?php } ?>
                     <a href="index.php?page=user&sort=az<?= $search ? '&search=' . urlencode($search) : '' ?>"><span>A-Z</span></a>
                     <a href="index.php?page=user&sort=za<?= $search ? '&search=' . urlencode($search) : '' ?>"><span>Z-A</span></a>
                 </div>
             </div>
 
+
+            <br><br><br>
             <!-- Danh sách người dùng -->
             <div class="trang-user" id="userList">
                 <?php
@@ -121,19 +118,19 @@ $result = $conn->query($sql);
     </div>
 </body>
 <script>
-document.getElementById("searchInput").addEventListener("input", function () {
-    const keyword = this.value.toLowerCase();
-    const users = document.querySelectorAll("#userList .user");
+    document.getElementById("searchInput").addEventListener("input", function() {
+        const keyword = this.value.toLowerCase();
+        const users = document.querySelectorAll("#userList .user");
 
-    users.forEach(user => {
-        const name = user.querySelector(".user-name").textContent.toLowerCase();
-        if (name.includes(keyword)) {
-            user.parentElement.style.display = "block"; // a tag bao quanh
-        } else {
-            user.parentElement.style.display = "none";
-        }
+        users.forEach(user => {
+            const name = user.querySelector(".user-name").textContent.toLowerCase();
+            if (name.includes(keyword)) {
+                user.parentElement.style.display = "block"; // a tag bao quanh
+            } else {
+                user.parentElement.style.display = "none";
+            }
+        });
     });
-});
 </script>
 
 </html>

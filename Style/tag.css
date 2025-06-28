@@ -30,6 +30,7 @@ body {
   }
   
   .tag-card {
+    width: 85%;
     background-color: #e1ecf4;
     border: 1px solid #c6d9ec;
     border-radius: 6px;
@@ -67,7 +68,6 @@ body {
   
   .container-wrapper {
     display: flex;
-    justify-content: center;
   }
   
   .main-tagques {

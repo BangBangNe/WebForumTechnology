@@ -6,7 +6,7 @@ header('Content-Type: application/json');
 
 $comment = trim($_POST['comment'] ?? '');
 $id_ques = intval($_POST['id_ques'] ?? 0);
-$id_user = 6; // giả sử đang login
+$id_user = $_SESSION['User_ID'];
 
 if ($comment !== '' && $id_ques > 0 && $id_user > 0) {
     $stmt = mysqli_prepare($link, "INSERT INTO comments (Comment, ID_User, ID_Ques) VALUES (?, ?, ?)");
@@ -22,7 +22,7 @@ if ($comment !== '' && $id_ques > 0 && $id_user > 0) {
 
         echo json_encode([
             'user_name' => $username ?? 'Người dùng',
-            'avatar' => $avatar ?? 'default.jpg',
+            'avatar' => $avatar ?? null,
             'text' => $comment,
             'time' => 'Vừa xong'
         ]);

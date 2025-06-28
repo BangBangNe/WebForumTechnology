@@ -1,16 +1,20 @@
 <?php include 'connect.php' ?>
-<?php 
-if($_SESSION['User_ID'] == null) {
-    header("Location:Code/signinUP.php ");
-    exit();
+<?php
+if ($_SESSION['User_ID'] == null) {
+  header("Location:Code/signinUP.php ");
+  exit();
 }
 ?>
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
   <meta charset="UTF-8">
   <title>Feedback</title>
   <style>
+    .feed{
+      padding: 5%;
+    }
     .form-group {
       margin-bottom: 20px;
     }
@@ -69,38 +73,44 @@ if($_SESSION['User_ID'] == null) {
       padding-bottom: 10px;
       margin-bottom: 30px;
     }
-    .name{
+
+    .name {
       border: 1px solid gray;
       border-radius: 5px;
       padding: 7px;
     }
   </style>
 </head>
+
 <body>
-  <h2>Tạo phản hồi</h2>
-  <form method="post" action="Code/add_feedback.php"> <!-- gửi qua file PHP -->
-  <div class="form-group">
-    <label>Người dùng:</label>
-    <div class="name">
-      <span class="user-info"><?php echo htmlspecialchars($_SESSION['User_name']); ?></span>
-    </div>
-  </div>
+  <div class="feed">
 
-  <div class="form-group">
-    <label>Tiêu đề hỗ trợ *</label>
-    <input type="text" name="title" placeholder="Nhập tiêu đề yêu cầu..." required>
-  </div>
+    <h2>Tạo phản hồi</h2>
+    <form method="post" action="Code/add_feedback.php"> <!-- gửi qua file PHP -->
+      <div class="form-group">
+        <label>Người dùng:</label>
+        <div class="name">
+          <span class="user-info"><?php echo htmlspecialchars($_SESSION['User_name']); ?></span>
+        </div>
+      </div>
 
-  <div class="form-group">
-    <label>Nội dung yêu cầu</label>
-    <textarea name="content" placeholder="Vui lòng điền nội dung yêu cầu rõ ràng, chi tiết, tiếng Việt có dấu." required></textarea>
-  </div>
+      <div class="form-group">
+        <label>Tiêu đề hỗ trợ *</label>
+        <input type="text" name="title" placeholder="Nhập tiêu đề yêu cầu..." required>
+      </div>
 
-  <div class="buttons">
-    <button class="btn-success" type="submit">Gửi đi</button>
-    <button class="btn-warning" type="reset">Làm mới</a></button>
+      <div class="form-group">
+        <label>Nội dung yêu cầu</label>
+        <textarea name="content" placeholder="Vui lòng điền nội dung yêu cầu rõ ràng, chi tiết, tiếng Việt có dấu." required></textarea>
+      </div>
+
+      <div class="buttons">
+        <button class="btn-success" type="submit">Gửi đi</button>
+        <button class="btn-warning" type="reset">Làm mới</a></button>
+      </div>
+    </form>
   </div>
-</form>
 
 </body>
+
 </html>

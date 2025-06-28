@@ -9,7 +9,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 
 $id = intval($_GET['id']);
 
-$sql = "SELECT p.title, p.content, p.post_id, t.Name AS tag_name, u.User_name
+$sql = "SELECT p.title, p.content, p.post_id, p.user_id, t.Name AS tag_name, u.User_name
         FROM posts p
         JOIN tags t ON p.tag_id = t.ID_tag
         JOIN users u ON p.user_id = u.User_ID
@@ -49,6 +49,12 @@ $user = mysqli_fetch_assoc($user_result);
             font-family: Arial, sans-serif;
             background-color: #f6f6f6;
             margin: 0;
+                margin-top: inherit;
+        }
+
+        .post-container {
+            padding: 5%;
+            width: 100%
         }
 
         h1 {
@@ -57,6 +63,12 @@ $user = mysqli_fetch_assoc($user_result);
 
         .meta {
             color: #777;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        div.meta a:hover {
+            color: blue;
             font-size: 14px;
             margin-bottom: 20px;
         }
@@ -92,13 +104,12 @@ $user = mysqli_fetch_assoc($user_result);
 
 <body>
     <div class="container-wrapper">
-        <?php echo $post['post_id'] ?>
         <div class="post-container">
             <?php
             if ($result && $result->num_rows > 0) {
 
                 echo '<h1>' . htmlspecialchars($post['title']) . '</h1>';
-                echo '<div class="meta">Người đăng: <strong>' . htmlspecialchars($post['User_name']) . '</strong></div>';
+                echo '<div class="meta">Người đăng: <a href=Code/check.php?user_id='. htmlspecialchars($post['user_id']).'><strong>' . htmlspecialchars($post['User_name']) . '</strong></a></div>';
 
                 if (!empty($post['content'])) {
                     echo '<div>' . htmlspecialchars($post['content']) . '</div>';
@@ -113,7 +124,7 @@ $user = mysqli_fetch_assoc($user_result);
             </br></br></br></br></br>
             <div class="comment_section">
                 <div class="comment_input">
-                     <img src="<?php echo $user['avatar'] ?? '../WebForumTechnology/icon/test.jpg' ?>" alt="Ảnh" class="comment_avata">
+                     <img src="<?php echo $user['avatar'] ?? '../WebForumTechnology/uploads/icon/avatar_md.jpg' ?>" alt="Ảnh" class="comment_avata">
                     <textarea name="comment" class="comment_input_box" data-post-id="<?= $post['post_id'] ?>" placeholder="Viết bình luận ....."></textarea>
                     <button class="send_comment_btn">Gửi bình luận</button>
                 </div>
@@ -123,7 +134,7 @@ $user = mysqli_fetch_assoc($user_result);
                     <?php else: ?>
                         <?php foreach ($comments as $c): ?>
                             <div class="comment_item">
-                                <img src="<?php echo htmlspecialchars($c['avatar'] ?? '../WebForumTechnology/icon/test.jpg'); ?>" alt="Ảnh" class="comment_avata">
+                                <img src="<?php echo htmlspecialchars($c['avatar']); ?>" alt="Ảnh" class="comment_avata">
                                 <div class="comment_content">
                                     <div class="comment_user"><?= htmlspecialchars($c['User_name']) ?></div>
                                     <div class="comment_text"><?= htmlspecialchars($c['content']) ?></div>

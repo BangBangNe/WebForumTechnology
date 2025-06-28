@@ -2,7 +2,7 @@
 
 // Nếu chưa đăng nhập thì chuyển về trang đăng nhập
 if (!isset($_SESSION['User_ID'])) {
-    header("Location: Code/signInUP.php");
+    echo "<script>window.location.href = 'Code/signInUP.php';</script>";
     exit();
 }
 
@@ -11,11 +11,10 @@ include 'connect.php';
 $ID_user = $_SESSION['User_ID'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $mo_ta = $_POST['Mo_ta'];
-
-    echo $mo_ta;
+    $Mo_ta = $_POST['Mo_ta'];
 
     $content = $_POST['content'];
+    
     $id_tag = (int)$_POST['id_tag'];
 
     $hinh_anh = null;
@@ -29,10 +28,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $sql = "INSERT INTO questions (Date_tao, Mo_ta, Hinh_anh, ID_Tags, ID_user, like_count, content)
-            VALUES (CURDATE(), '$mo_ta', " . ($hinh_anh ? "'$hinh_anh'" : "NULL") . ", $id_tag, $ID_user, 0,'$content')";
+            VALUES (CURDATE(), '$Mo_ta', " . ($hinh_anh ? "'$hinh_anh'" : "NULL") . ", $id_tag, $ID_user, 0,'$content')";
 
     if ($conn->query($sql) === TRUE) {
-        header("Location: index.php");
+        echo "<script>window.location.href = 'index.php';</script>";
         exit();
     } else {
         echo "Lỗi: " . $conn->error;
@@ -56,9 +55,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .container-wrapper {
-            margin: 0 auto;
             display: flex;
-            justify-content: center;
+            justify-content: left;
+        }
+
+        .container {
+            margin: auto;
+            background: white;
+            border-radius: 8px;
         }
 
         .form-container {
@@ -86,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin-bottom: 8px;
             font-size: 15px;
         }
-        
+
         input[type="Mo_ta"],
         textarea,
         select {
@@ -115,14 +119,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .submit-btn {
-            background-color: #0a95ff;
             color: white;
+            padding: 10px 20px;
             border: none;
-            padding: 10px 12px;
-            border-radius: 3px;
-            font-size: 13px;
+            border-radius: 6px;
             cursor: pointer;
-            transition: background-color 0.15s ease-in-out;
+            font-size: 16px;
+            width: 100%;
         }
 
         .submit-btn:hover {
@@ -156,7 +159,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <form method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="Mo_ta">Tiêu đề câu hỏi:</label>
-                    <input type="Mo_ta" id="Mo_ta" name="title" required>
+                    <input type="Mo_ta" id="Mo_ta" name="Mo_ta" required>
                 </div>
 
                 <div class="form-group">
@@ -188,7 +191,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
 
             <div class="form-footer">
-                <p>Bằng cách đăng câu hỏi, bạn đồng ý với <a href="#">điều khoản sử dụng</a> và <a href="#">chính sách bảo mật</a> của chúng tôi.</p>
+                <p>Hãy cố gắng cung cấp hình ảnh và ghi nội dung chi tiết để mọi người có thể hỗ trợ bạn nhé!</p>
             </div>
         </div>
     </div>

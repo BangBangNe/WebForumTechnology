@@ -136,7 +136,7 @@ include '../code/connect.php'?>
 
     .main {
         display: flex;
-        height: calc(100vh - 50px);
+        height: max-content;    
     }
 
     .sidebar {
@@ -164,6 +164,7 @@ include '../code/connect.php'?>
         flex: 1;
         padding: 30px;
         background-color: #f4f4f4;
+        height: max-content;
     }
     .sidebar li.active {
         background-color: #4f46e5; /* Màu nền nổi bật */
@@ -177,12 +178,7 @@ include '../code/connect.php'?>
     <div class="topbar">
         <div class="left">
             <strong>Dashboard</strong>
-            <button>Nâng cấp</button>
-            <button>Tạo mới</button>
-        </div>
-        <div class="right">
-            <span>xem trang web</span>
-            <span>Hello  <?php echo htmlspecialchars($_SESSION['Admin_Name']);?></span>
+            <span><h2>Hello, <?php echo htmlspecialchars($_SESSION['Admin_Name']);?></h2></span>
         </div>
     </div>
         
@@ -208,9 +204,10 @@ include '../code/connect.php'?>
                     echo "<p>Trang không hợp lệ.</p>";
                 }
             ?>
+            <br><br><br><br>
         </div>
     </div>
-
+    
 </body>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
@@ -241,6 +238,20 @@ include '../code/connect.php'?>
         });
         });
 
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const currentURL = new URL(window.location.href);
+        const page = currentURL.searchParams.get("page") || "tongquan";
+
+        // Nếu là trang tongquan thì gọi drawChart luôn
+        if (page === "tongquan" && document.getElementById("barChart")) {
+            drawChart();
+        }
+    });
+
+
+        
+        
         // ✅ Hàm vẽ biểu đồ Chart.js
         function drawChart() {
     const pieLabels = <?= json_encode($labelstron); ?>;
@@ -301,8 +312,9 @@ include '../code/connect.php'?>
             }
         });
     }
+    
 }
 
     </script>
-    
+
 </html>

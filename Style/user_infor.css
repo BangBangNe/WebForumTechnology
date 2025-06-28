@@ -1,5 +1,29 @@
 .container {
   padding: 0;
+      margin-top: inherit;
+}
+
+.no-messages {
+  padding: 20px;
+}
+
+button.update {
+  width: 100%;
+  padding: 15px;
+  font-size: 15px;
+  background-color: #2a96d5;
+  color: white;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+button.update:hover {
+  border: none;
+  width: 100%;
+  padding: 15px;
+  font-size: 15px;
+  background-color: #a4d9f7;
+  color: #2a96d5;
 }
 
 .container_up {
@@ -115,6 +139,7 @@
 
 .container_name .infor2 p {
   margin: 10px;
+  color: #929292;
 }
 
 .container_name .infor2 i {
@@ -146,6 +171,14 @@
   margin-top: 15px;
   margin-left: 2%;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.container_stats p {
+  color: #929292;
+}
+
+.container_stats p i {
+  color: #ddd;
 }
 
 /* Chat box */
@@ -187,8 +220,8 @@
   color: #333;
 }
 
-.chat_infor{
-    width: 100%;
+.chat_infor {
+  width: 100%;
 }
 
 .chat_infor p {
@@ -400,12 +433,12 @@
   margin-bottom: 10px;
 }
 
-.post_text h2{
+.post_text h2 {
   padding: 3%;
   margin: 0;
 }
 
-.post_text p{
+.post_text p {
   padding: 3%;
   margin: 0;
 }
@@ -474,8 +507,9 @@
 }
 
 .comment_input img {
-  width: 6%;
-  height: 6%;
+  width: 100%;
+  max-width: 45px;
+  height: 45px;
   align-content: center;
   border-radius: 50%;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -507,16 +541,16 @@
 }
 
 .comment_item img {
-  width: 5%;
-  height: 5%;
+  width: 100%;
+  max-width: 35px;
+  height: 35px;
   border-radius: 50%;
-  align-content: center;
   margin-top: 2%;
 }
 
 .comment_content {
   background-color: #f0f2f5;
-  padding: 2% 5%;
+  padding: 2% 3%;
   border-radius: 18px;
   width: 100%;
 }
@@ -545,4 +579,98 @@
 
 .comment_action:hover {
   text-decoration: underline;
+}
+
+/* Trang cập nhật */
+.infor1 input,
+.data p input {
+  background-color: transparent;
+  color: #ddd;
+  width: 95%;
+}
+
+.infor1 input:hover,
+.data p input:hover {
+  color: #ddd;
+  padding: 5px;
+}
+
+.infor1 input {
+  font-size: large;
+}
+
+.custom-file-label {
+  background-color: #717c8a;
+  padding: 3%;
+  padding: 10px;
+  border-radius: 50px;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.custom-file-label:hover {
+  background-color: #93b7e7;
+  padding: 3%;
+  padding: 15px;
+  border-radius: 50px;
+}
+
+#about {
+  width: 100%;
+  border: none;
+  background-color: #555;
+  color: #ddd;
+  min-height: 60px;
+  resize: none; /* Tắt góc kéo */
+  overflow: hidden; /* Ẩn thanh cuộn */
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.capnhat button{
+  margin-top: 30px;
+  width: 100%;
+  background-color: #717c8a;
+  padding: 3%;
+  padding: 10px;
+  border-radius: 50px;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: none;
+  color: #ddd;
+  font-size: large;
+  font-weight: bold;
+}
+
+
+.capnhat button:hover {
+  background-color: #93b7e7;
+  padding: 3%;
+  padding: 15px;
+  border-radius: 50px;
+}
+
+a.btn-UI{
+  padding: 15px;
+  background-color: #fff;
+}
+
+a.btn-UI:hover{
+  padding: 15px;
+}
+
+.chat_message.sent{
+  margin: 0;
+  padding-top: 10px;
+}
+
+.post_pic{
+  padding-top: 15px;
+  width: 100%;
+}
+
+.post_pic img{
+  width: 100%;
 }

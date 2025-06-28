@@ -20,18 +20,10 @@
         <div class="user-actions">
           <button class="ask-btn" onclick="location.href='index.php?page=bai_post'">Tạo bài viết</button>
           <button id="toggleFilterBtn" class="filter-toggle-btn">Lọc</button>
-          <div class="user-avatar" title="User profile"></div>
         </div>
       </div>
       <div style="color: gray; text-align:justify;">
         <i>Nơi người dùng cùng thảo luận về các vấn đề liên quan đến công nghệ.</i>
-        <!-- Đếm số lượng bài viết -->
-        <?php
-        $count = "SELECT p.post_id
-                  FROM posts p";
-        $count_ques = $conn->query($count);
-        echo '<p>Hiện tại đang có ' . $count_ques->num_rows . ' câu hỏi.</p>';
-        ?>
       </div>
       <br>
 
@@ -50,7 +42,6 @@
             <h4>Sắp xếp theo</h4>
             <label><input type="radio" name="sort" value="newest" <?= ($_GET['sort'] ?? '') == 'newest' ? 'checked' : '' ?>> Mới nhất</label><br>
             <label><input type="radio" name="sort" value="oldest" <?= ($_GET['sort'] ?? '') == 'oldest' ? 'checked' : '' ?>> Cũ nhất</label><br>
-            <label><input type="radio" name="sort" value="likes" <?= ($_GET['sort'] ?? '') == 'likes' ? 'checked' : '' ?>> Thích nhiều nhất</label><br>
           </div>
 
           <div class="filter-group">

@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
     if ($stmt->execute()) {
-        header('Location: index.php');
+        echo "<script>window.location.href = 'index.php?page=mainPost';</script>";
         echo "Thêm bài viết thành công!";
     } else {
         echo "Lỗi khi thêm: " . $stmt->error;
@@ -43,28 +43,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Tạo bài viết</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f6f8;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #232629;
+        }
+
+        .container-wrapper {
+            display: flex;
+            justify-content: left;
         }
 
         .container {
-            margin: 40px auto;
-            background-color: #fff;
-            padding: 30px 40px;
-            border-radius: 12px;
+            width: 95%;
+            background: white;
+            border-radius: 8px;
+            padding-top: 1%;
         }
 
-        h2 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 25px;
+        .form-container {
+            background: white;
+            border-radius: 5px;
+            padding: 24px;
+            max-width: 800px;
+        }
+
+        .form-container h2 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: #242729;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
         }
 
         label {
-            font-weight: bold;
             display: block;
-            margin-bottom: 6px;
-            color: #555;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 15px;
         }
 
         input[type="text"],
@@ -72,77 +89,100 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         select {
             width: 100%;
             padding: 10px;
-            margin-bottom: 18px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
+            border: 1px solid #bbc0c4;
+            border-radius: 3px;
             font-size: 14px;
+            transition: border-color 0.15s ease-in-out;
+            margin-bottom: 2%;
         }
 
         textarea {
-            height: 150px;
+            min-height: 150px;
             resize: vertical;
         }
 
+        textarea:focus,
+        select:focus {
+            border-color: #6cbbf7;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(0, 149, 255, 0.15);
+        }
+
+        .file-input {
+            margin-top: 8px;
+        }
+
         .btn-submit {
-            background-color: #1976d2;
             color: white;
             padding: 10px 20px;
             border: none;
             border-radius: 6px;
             cursor: pointer;
             font-size: 16px;
+            width: 100%;
         }
 
         .btn-submit:hover {
-            background-color: #1565c0;
+            background-color: #0077cc;
         }
 
-        .error {
-            color: red;
-            margin-bottom: 15px;
+        .form-footer {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #e4e6e8;
+            font-size: 13px;
+            color: #6a737c;
         }
 
-        .back-link {
-            display: inline-block;
-            margin-top: 20px;
-            color: #1976d2;
-            text-decoration: none;
-        }
+        @media (max-width: 768px) {
+            .container-wrapper {
+                padding: 10px;
+            }
 
-        .back-link:hover {
-            text-decoration: underline;
+            .form-container {
+                padding: 15px;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <h2>Tạo bài viết mới</h2>
+    <div class="container-wrapper">
+        <div class="container">
+            <h2>Tạo bài viết mới</h2>
+            <br>
+            <?php if (isset($error)) echo '<div class="error">' . htmlspecialchars($error) . '</div>'; ?>
 
-        <?php if (isset($error)) echo '<div class="error">' . htmlspecialchars($error) . '</div>'; ?>
+            <form method="POST" action="">
+                <div class="form-group">
+                    <label for="title">Tiêu đề bài viết:</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
 
-        <form method="POST" action="">
-            <label for="title">Tiêu đề bài viết:</label>
-            <input type="text" id="title" name="title" required>
+                <div class="form-group">
+                    <label for="content">Nội dung:</label>
+                    <textarea id="content" name="content" required></textarea>
+                </div>
 
-            <label for="content">Nội dung:</label>
-            <textarea id="content" name="content" required></textarea>
+                <div class="form-group">
+                    <label for="tag_id">Chọn thẻ (Tag):</label>
+                    <select name="tag_id" id="tag_id" required>
+                        <option value="">-- Chọn tag --</option>
+                        <?php
+                        $result = $conn->query("SELECT * FROM tags");
+                        while ($row = $result->fetch_assoc()) {
+                            echo '<option value="' . $row['ID_tag'] . '">' . htmlspecialchars($row['Name']) . '</option>';
+                        }
+                        ?>
+                    </select>
+                </div>
 
-            <label for="tag_id">Chọn thẻ (Tag):</label>
-            <select name="tag_id" id="tag_id" required>
-                <option value="">-- Chọn tag --</option>
-                <?php
-                $result = $conn->query("SELECT * FROM tags");
-                while ($row = $result->fetch_assoc()) {
-                    echo '<option value="' . $row['ID_tag'] . '">' . htmlspecialchars($row['Name']) . '</option>';
-                }
-                ?>
-            </select>
-
-            <button type="submit" class="btn-submit">Đăng bài</button>
-        </form>
-
-        <a href="../mainPost.php" class="back-link">&larr; Quay lại trang bài viết</a>
+                <button type="submit" class="btn-submit">Đăng bài</button>
+            </form>
+            <div class="form-footer">
+                <p style="font-size: large;">Các nội dung thảo luận cần văn minh và chính xác!</p>
+            </div>
+        </div>
     </div>
 </body>
 

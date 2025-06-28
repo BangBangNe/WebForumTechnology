@@ -40,7 +40,6 @@ div.fas.fa-search{
   border: 1px solid #ccc;
   border-radius: 6px;
   align-items: center;
-  padding-left: 10px;
 }
 .sap-xep a {
   text-decoration: none;
@@ -51,8 +50,8 @@ div.fas.fa-search{
 }
 .sap-xep span:hover {
   background-color: #ccc;
-  padding: 10px;
   border-radius: 6px;
+  color: rgb(46, 46, 46);
 }
 .time {
   display: flex;

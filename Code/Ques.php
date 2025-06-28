@@ -9,7 +9,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 
 $id = intval($_GET['id']);
 
-$sql = "SELECT q.ID_Ques, q.Mo_ta, q.Hinh_anh, q.content ,t.Name AS tag_name, u.User_name
+$sql = "SELECT q.ID_Ques, q.Mo_ta, q.Hinh_anh, q.content, q.ID_user,t.Name AS tag_name, u.User_name
         FROM questions q
         JOIN tags t ON q.ID_Tags = t.ID_tag
         JOIN users u ON q.ID_user = u.User_ID
@@ -50,6 +50,7 @@ $user = mysqli_fetch_assoc($user_result);
 
         .post-container {
             padding: 5%;
+            width: 100%
         }
 
         h1 {
@@ -58,6 +59,12 @@ $user = mysqli_fetch_assoc($user_result);
 
         .meta {
             color: #777;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        div.meta a:hover {
+            color: blue;
             font-size: 14px;
             margin-bottom: 20px;
         }
@@ -101,7 +108,7 @@ $user = mysqli_fetch_assoc($user_result);
                 if (!empty($ques['Hinh_anh'])) {
                     echo '<img class="image" src="' . htmlspecialchars($ques['Hinh_anh']) . '" alt="Hình ảnh bài viết">';
                 }
-                echo '<div class="meta">Người đăng: <strong>' . htmlspecialchars($ques['User_name']) . '</strong></div>';
+                echo '<div class="meta">Người đăng: <a href=Code/check.php?user_id='. htmlspecialchars($ques['ID_user']).'><strong>' . htmlspecialchars($ques['User_name']) . '</strong></a></div>';
 
 
 
@@ -113,7 +120,7 @@ $user = mysqli_fetch_assoc($user_result);
             </br></br></br></br></br>
             <div class="comment_section">
                 <div class="comment_input">
-                    <img src="<?= $user['avatar'] ?? 'test.jpg' ?>" alt="" class="comment_avata">
+                    <img src="<?= $user['avatar'] ?? '../WebForumTechnology/uploads/icon/avatar_md.jpg' ?>" alt="" class="comment_avata">
                     <textarea name="comment" class="comment_input_box" data-ques-id="<?= $ques['ID_Ques'] ?>" placeholder="Viết bình luận ....."></textarea>
                     <button class="send_comment_btn">Gửi bình luận</button>
                 </div>

@@ -93,7 +93,7 @@ $result = mysqli_query($conn, $sql);
           <tr>
             <td><?= $row['User_ID'] ?></td> 
             <td>
-              <img src="Anh/<?= $row['avatar'] ? $row['avatar'] : 'default.png' ?>" alt="avatar" class="avatar">
+              <img src="../<?= $row['avatar']?>" alt="avatar" class="avatar">
             </td>
             <td><?= htmlspecialchars($row['user_name']) ?></td>
             <td><?= htmlspecialchars($row['location']) ?></td>
