@@ -32,7 +32,7 @@ $allowed_pages = ['main', 'user', 'user_infor', 'tag', 'mainPost', 'tro_chuyen',
   <link rel="stylesheet" href="Style/user.css">
   <link rel="stylesheet" href="Style/user_infor.css">
     <link rel="stylesheet" href="Style/tag.css">
-  <title>Stack Overflow - Newest Questions</title>
+  <title>ForumTechnology</title>
 </head>
 
 <body>
